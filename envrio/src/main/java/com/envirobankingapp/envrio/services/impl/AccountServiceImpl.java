@@ -1,16 +1,14 @@
 package com.envirobankingapp.envrio.services.impl;
 
 import com.envirobankingapp.envrio.services.AccountService;
-import jakarta.websocket.server.ServerEndpoint;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
-public class SavingsAccountImpl implements AccountService {
+public class AccountServiceImpl implements AccountService {
 
     public BigDecimal balance;
 

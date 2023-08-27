@@ -1,7 +1,7 @@
 package com.envirobankingapp.envrio.controllers;
 
 
-import com.envirobankingapp.envrio.services.impl.SavingsAccountImpl;
+import com.envirobankingapp.envrio.services.impl.AccountServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -10,10 +10,10 @@ import java.math.BigDecimal;
 @RequestMapping(path = "/api/v1/accounts")
 public class AccountController {
 
-    private final SavingsAccountImpl savingsAccount;
+    private final AccountServiceImpl savingsAccount;
 
 
-    public AccountController(SavingsAccountImpl savingsAccount){
+    public AccountController(AccountServiceImpl savingsAccount){
         this.savingsAccount = savingsAccount;
     }
 

@@ -1,4 +1,7 @@
 package com.envirobankingapp.envrio.repository;
 
-public interface AccountsRepository {
+import com.envirobankingapp.envrio.entities.Accounts;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AccountsRepository extends JpaRepository<Accounts, Long> {
 }
