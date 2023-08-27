@@ -1,13 +1,13 @@
 package com.envirobankingapp.envrio.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.envirobankingapp.envrio.enums.Accounts;
+import com.envirobankingapp.envrio.enums.Transactions;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 
 @Entity
-public class Transactions {
+public class TransactionEntity {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -23,8 +23,12 @@ public class Transactions {
     private UUID transactionId;
     private String customerNum;
     private Long accountNum;
-    private String typeOfTransaction;
-    private String accountType;
-    private int withdrawalAmount;
+
+    @Enumerated(EnumType.STRING)
+    private Transactions typeOfTransaction;
+
+    @Enumerated(EnumType.STRING)
+    private Accounts accountType;
+    private BigDecimal withdrawalAmount;
 
 }

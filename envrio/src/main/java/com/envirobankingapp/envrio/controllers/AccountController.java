@@ -1,7 +1,11 @@
 package com.envirobankingapp.envrio.controllers;
 
 
+import com.envirobankingapp.envrio.dto.AccountsDto;
+import com.envirobankingapp.envrio.exceptions.WithdrawalException;
 import com.envirobankingapp.envrio.services.impl.AccountServiceImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -10,20 +14,22 @@ import java.math.BigDecimal;
 @RequestMapping(path = "/api/v1/accounts")
 public class AccountController {
 
-    private final AccountServiceImpl savingsAccount;
+    private final AccountServiceImpl accountService;
 
 
-    public AccountController(AccountServiceImpl savingsAccount){
-        this.savingsAccount = savingsAccount;
+    public AccountController(AccountServiceImpl accountService){
+        this.accountService = accountService;
     }
 
 
-    @GetMapping("/users")
-    public void getWithdrawFromSavings(@RequestParam String accountNum, @RequestParam BigDecimal amountToWithdraw){
-        savingsAccount.withdraw(accountNum, amountToWithdraw);
+    @PostMapping ("/withdraw")
+    public ResponseEntity<String> getWithdrawFromSavings(@RequestBody String accountNum, @RequestBody BigDecimal amountToWithdraw){
 
-
+        try{
+            accountService.withdraw(accountNum, amountToWithdraw);
+            return ResponseEntity.ok("withdraw was successful");
+        } catch (WithdrawalException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
-
-
 }
