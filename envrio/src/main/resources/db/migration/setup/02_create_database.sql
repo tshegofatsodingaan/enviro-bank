@@ -1,0 +1,3 @@
+CREATE DATABASE edn_db
+WITH OWNER = enviro_dn_user
+CONNECTION LIMIT = -1;
