@@ -2,6 +2,7 @@ package com.envirobankingapp.envrio.controllers;
 
 
 import com.envirobankingapp.envrio.dto.AccountsDto;
+import com.envirobankingapp.envrio.dto.TransactionsDto;
 import com.envirobankingapp.envrio.exceptions.WithdrawalException;
 import com.envirobankingapp.envrio.services.impl.AccountServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -23,13 +24,14 @@ public class AccountController {
 
 
     @PostMapping ("/withdraw")
-    public ResponseEntity<String> getWithdrawFromSavings(@RequestBody String accountNum, @RequestBody BigDecimal amountToWithdraw){
+    public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionsDto transactionsDto){
 
         try{
-            accountService.withdraw(accountNum, amountToWithdraw);
+            accountService.withdraw(transactionsDto.getAccountNum(), transactionsDto.getTransactionAmount());
             return ResponseEntity.ok("withdraw was successful");
         } catch (WithdrawalException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 }

@@ -15,6 +15,9 @@ import java.util.UUID;
 @NoArgsConstructor
 
 @Entity
+@Table(
+        name = "transactions"
+)
 public class TransactionEntity {
     @Id
     @GeneratedValue(
@@ -29,6 +32,6 @@ public class TransactionEntity {
 
     @Enumerated(EnumType.STRING)
     private Accounts accountType;
-    private BigDecimal withdrawalAmount;
+    private BigDecimal transactionAmount;
 
 }

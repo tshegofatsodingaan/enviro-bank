@@ -13,6 +13,6 @@ CREATE TABLE IF NOT EXISTS transactions (
     account_num SERIAL NOT NULL,
     type_of_transaction VARCHAR(50) NOT NULL,
     account_type VARCHAR(25) NOT NULL,
-    withdrawal_amount VARCHAR(50) NOT NULL,
+    transaction_amount VARCHAR(50) NOT NULL,
     CONSTRAINT foreign_key_account_num FOREIGN KEY(account_num) REFERENCES accounts(account_num) ON UPDATE CASCADE ON DELETE CASCADE
 );

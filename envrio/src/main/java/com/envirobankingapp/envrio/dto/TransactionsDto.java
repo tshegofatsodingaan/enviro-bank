@@ -15,5 +15,5 @@ public class TransactionsDto {
     private Long accountNum;
     private Transactions typeOfTransaction;
     private Accounts accountType;
-    private BigDecimal withdrawalAmount;
+    private BigDecimal transactionAmount;
 }

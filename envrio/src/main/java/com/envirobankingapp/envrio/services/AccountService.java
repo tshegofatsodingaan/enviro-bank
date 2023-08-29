@@ -1,8 +1,10 @@
 package com.envirobankingapp.envrio.services;
 
+import com.envirobankingapp.envrio.entities.AccountEntity;
+
 import java.math.BigDecimal;
 
 public interface AccountService {
-    void withdraw(String accountNum, BigDecimal
+    void withdraw(Long accountNum, BigDecimal
             amountToWithdraw);
 }

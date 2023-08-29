@@ -13,6 +13,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 
 @Entity
+@Table(
+        name = "accounts"
+)
 public class AccountEntity {
     @Id
     @GeneratedValue (
@@ -20,7 +23,7 @@ public class AccountEntity {
     )
     private Long accountNum;
     private String customerNum;
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Accounts accountType;
     private BigDecimal accountBalance;
     private BigDecimal overdraft;
