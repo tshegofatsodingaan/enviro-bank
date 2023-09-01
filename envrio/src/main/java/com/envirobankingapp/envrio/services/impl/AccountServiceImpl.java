@@ -5,6 +5,8 @@ import com.envirobankingapp.envrio.entities.AccountEntity;
 import com.envirobankingapp.envrio.entities.TransactionEntity;
 import com.envirobankingapp.envrio.enums.Accounts;
 import com.envirobankingapp.envrio.enums.Transactions;
+import com.envirobankingapp.envrio.exceptions.EntityNotFoundException;
+import com.envirobankingapp.envrio.exceptions.InsufficientFundsException;
 import com.envirobankingapp.envrio.repository.AccountsRepository;
 import com.envirobankingapp.envrio.repository.TransactionsRepository;
 import com.envirobankingapp.envrio.services.AccountService;
@@ -73,6 +75,8 @@ public class AccountServiceImpl implements AccountService {
             balance = subtractedAmount;
             accountEntity.setAccountBalance(subtractedAmount);
             accountsRepository.save(accountEntity);
+        } else{
+            throw new InsufficientFundsException("Savings Account cannot contain amount less than a R1000.00.");
         }
     }
 
@@ -85,7 +89,7 @@ public class AccountServiceImpl implements AccountService {
             accountEntity.setAccountBalance(subtractedAmount);
             accountsRepository.save(accountEntity);
         } else{
-            System.out.println("Insufficient funds");
+            throw new InsufficientFundsException("You have exceeded your limit.");
         }
     }
 
@@ -98,10 +102,17 @@ public class AccountServiceImpl implements AccountService {
 
     public void softDelete(UUID id) {
         Optional<TransactionEntity> optionalTransaction = transactionsRepository.findById(id);
+        if(optionalTransaction.isPresent()){
+            TransactionEntity transaction = optionalTransaction.orElseThrow();
+            transaction.setActive(false);
+            transactionsRepository.save(transaction);
+
+        } else{
+            throw new EntityNotFoundException("Transaction does not exist.");
+        }
         //should through entity not found error
-        TransactionEntity transaction = optionalTransaction.orElseThrow();
-        transaction.setActive(true);
-        transactionsRepository.save(transaction);
+
+
     }
 
 

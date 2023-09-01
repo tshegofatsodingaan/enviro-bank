@@ -4,6 +4,8 @@ package com.envirobankingapp.envrio.controllers;
 import com.envirobankingapp.envrio.dto.AccountsDto;
 import com.envirobankingapp.envrio.dto.TransactionsDto;
 import com.envirobankingapp.envrio.entities.AccountEntity;
+import com.envirobankingapp.envrio.exceptions.EntityNotFoundException;
+import com.envirobankingapp.envrio.exceptions.InsufficientFundsException;
 import com.envirobankingapp.envrio.exceptions.WithdrawalException;
 import com.envirobankingapp.envrio.services.AccountService;
 import com.envirobankingapp.envrio.services.impl.AccountServiceImpl;
@@ -32,8 +34,8 @@ public class AccountController {
         try{
             accountService.withdraw(transactionsDto.getAccountNum(), transactionsDto.getTransactionAmount());
             return ResponseEntity.ok("withdraw was successful");
-        } catch (WithdrawalException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (InsufficientFundsException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -44,8 +46,13 @@ public class AccountController {
 
     @DeleteMapping("/{accountId}")
     public ResponseEntity<String> softDeletion(@PathVariable UUID accountId){
-        accountService.softDelete(accountId);
-        return ResponseEntity.ok("transactions have been deleted");
+        try{
+            accountService.softDelete(accountId);
+            return ResponseEntity.ok("Transactions have been deleted");
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 
 }
