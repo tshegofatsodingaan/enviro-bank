@@ -16,3 +16,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/eba_db
     username: enviro_ba_user
     password: localpasswd
+account-constants:
+  minimum: 1000.00
+  overdraft: 10000.00

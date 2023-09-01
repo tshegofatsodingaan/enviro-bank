@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,13 +20,19 @@ import java.math.BigDecimal;
 )
 public class AccountEntity {
     @Id
-    @GeneratedValue (
-            strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Long accountNum;
+
     private String customerNum;
+
     @Enumerated(value = EnumType.STRING)
     private Accounts accountType;
+
     private BigDecimal accountBalance;
-    private BigDecimal overdraft;
+
+/*    @OneToMany(mappedBy = "accountEntity")
+    private List<TransactionEntity> transactions = new ArrayList<>();*/
+
 }

@@ -10,10 +10,10 @@ import java.util.UUID;
 @Data
 public class TransactionsDto {
 
-    private UUID transactionId;
-    private String customerNum;
+    private UUID id;
     private Long accountNum;
     private Transactions typeOfTransaction;
-    private Accounts accountType;
     private BigDecimal transactionAmount;
+
+
 }
