@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +16,7 @@ import java.util.List;
 @Table(
         name = "accounts"
 )
-public class AccountEntity {
+public class Account {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,13 +1,11 @@
 package com.envirobankingapp.envrio.entities;
 
-import com.envirobankingapp.envrio.enums.Accounts;
 import com.envirobankingapp.envrio.enums.Transactions;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.CharArrayReader;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -19,7 +17,7 @@ import java.util.UUID;
 @Table(
         name = "transactions"
 )
-public class TransactionEntity {
+public class Transaction {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -35,10 +33,10 @@ public class TransactionEntity {
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "accountNum", referencedColumnName = "accountNum")
-    private AccountEntity accountNum;
+    private Account accountNum;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private AccountEntity accountEntity;
+    private Account account;
 
 }

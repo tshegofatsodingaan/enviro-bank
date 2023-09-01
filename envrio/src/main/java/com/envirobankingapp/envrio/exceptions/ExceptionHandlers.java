@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-@ControllerAdvice
+@ControllerAdvice // defines a global exception handling for Spring MVC controllers
 public class ExceptionHandlers {
     @ExceptionHandler(InsufficientFundsException.class)
     public ResponseEntity<Object> message(InsufficientFundsException e){

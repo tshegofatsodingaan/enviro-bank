@@ -1,8 +1,8 @@
 package com.envirobankingapp.envrio.services.impl;
 
 import com.envirobankingapp.envrio.dto.AccountConstants;
-import com.envirobankingapp.envrio.entities.AccountEntity;
-import com.envirobankingapp.envrio.entities.TransactionEntity;
+import com.envirobankingapp.envrio.entities.Account;
+import com.envirobankingapp.envrio.entities.Transaction;
 import com.envirobankingapp.envrio.enums.Accounts;
 import com.envirobankingapp.envrio.enums.Transactions;
 import com.envirobankingapp.envrio.exceptions.EntityNotFoundException;
@@ -10,7 +10,6 @@ import com.envirobankingapp.envrio.exceptions.InsufficientFundsException;
 import com.envirobankingapp.envrio.repository.AccountsRepository;
 import com.envirobankingapp.envrio.repository.TransactionsRepository;
 import com.envirobankingapp.envrio.services.AccountService;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,13 +19,12 @@ import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    private AccountEntity accountEntity;
-
+    private Account account;
     private  final TransactionsRepository transactionsRepository;
     private final AccountsRepository accountsRepository;
-
     private final AccountConstants accountConstants;
     BigDecimal balance;
+
 
     public AccountServiceImpl(TransactionsRepository transactionsRepository, AccountsRepository accountsRepository, AccountConstants accountConstants) {
         this.transactionsRepository = transactionsRepository;
@@ -38,82 +36,79 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void withdraw(Long accountNum, BigDecimal amountToWithdraw) {
 
-        Optional<AccountEntity> account = Optional.ofNullable(accountsRepository.findByAccountNum(accountNum));
+        Optional<Account> account = Optional.ofNullable(accountsRepository.findByAccountNum(accountNum));
         if(account.isPresent()){
-            accountEntity = account.get();
+            this.account = account.get();
         }else{
             System.out.println("account not found");
         }
-        if (accountEntity.getAccountType() == Accounts.SAVINGS){
+        if (this.account.getAccountType() == Accounts.SAVINGS){
             withdrawFromSavings(amountToWithdraw);
-        } if(accountEntity.getAccountType() == Accounts.CURRENT){
+        } if(this.account.getAccountType() == Accounts.CURRENT){
             withdrawFromCurrent(amountToWithdraw);
         }
 
         //dto to entity
-        TransactionEntity transactionEntity = new TransactionEntity();
-        AccountEntity newAccountInfo = new AccountEntity();
-        transactionEntity.setTransactionAmount(amountToWithdraw);
-        transactionEntity.setTypeOfTransaction(Transactions.WITHDRAW);
-        transactionEntity.setAccountNum(accountEntity);
-        transactionEntity.setAccountEntity(accountEntity);
-        TransactionEntity newTransaction = transactionsRepository.save(transactionEntity);
+        Transaction transaction = new Transaction();
+        Account newAccountInfo = new Account();
+        transaction.setTransactionAmount(amountToWithdraw);
+        transaction.setTypeOfTransaction(Transactions.WITHDRAW);
+        transaction.setAccountNum(this.account);
+        transaction.setAccount(this.account);
+        Transaction newTransaction = transactionsRepository.save(transaction);
 
 
         // entity to dto
-        newTransaction.setId(transactionEntity.getId());
-        newTransaction.setTransactionAmount(transactionEntity.getTransactionAmount());
-        newTransaction.setTypeOfTransaction(transactionEntity.getTypeOfTransaction());
+        newTransaction.setId(transaction.getId());
+        newTransaction.setTransactionAmount(transaction.getTransactionAmount());
+        newTransaction.setTypeOfTransaction(transaction.getTypeOfTransaction());
         newAccountInfo.setAccountBalance(balance);
     }
 
+
     private void withdrawFromSavings(BigDecimal amount){
-        balance = accountEntity.getAccountBalance();
+        balance = account.getAccountBalance();
         BigDecimal subtractedAmount = balance.subtract(amount);
         if(balance.compareTo(amount) > 0
         && subtractedAmount.compareTo(accountConstants.minimum) >= 0) {
             balance = subtractedAmount;
-            accountEntity.setAccountBalance(subtractedAmount);
-            accountsRepository.save(accountEntity);
+            account.setAccountBalance(subtractedAmount);
+            accountsRepository.save(account);
         } else{
             throw new InsufficientFundsException("Savings Account cannot contain amount less than a R1000.00.");
         }
     }
 
+
     private void withdrawFromCurrent(BigDecimal amount){
-        balance = accountEntity.getAccountBalance();
+        balance = account.getAccountBalance();
         BigDecimal availableFunds = balance.add(accountConstants.overdraft);
         BigDecimal subtractedAmount = balance.subtract(amount);
         if(amount.compareTo(availableFunds) < 0){
             balance = subtractedAmount;
-            accountEntity.setAccountBalance(subtractedAmount);
-            accountsRepository.save(accountEntity);
+            account.setAccountBalance(subtractedAmount);
+            accountsRepository.save(account);
         } else{
             throw new InsufficientFundsException("You have exceeded your limit.");
         }
     }
 
+
     @Override
-    public List<TransactionEntity> getTransactionsByAccountNumber(AccountEntity accountNum) {
-        System.out.println(accountConstants);
+    public List<Transaction> getTransactionsByAccountNumber(Account accountNum) {
         return transactionsRepository.findByAccountNumAndActive(accountNum, true);
     }
 
 
     public void softDelete(UUID id) {
-        Optional<TransactionEntity> optionalTransaction = transactionsRepository.findById(id);
+        Optional<Transaction> optionalTransaction = transactionsRepository.findById(id);
         if(optionalTransaction.isPresent()){
-            TransactionEntity transaction = optionalTransaction.orElseThrow();
+            Transaction transaction = optionalTransaction.orElseThrow();
             transaction.setActive(false);
             transactionsRepository.save(transaction);
 
         } else{
             throw new EntityNotFoundException("Transaction does not exist.");
         }
-        //should through entity not found error
-
-
     }
-
-
 }
