@@ -8,8 +8,8 @@
 		<version>3.1.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.envirobankingapp</groupId>
-	<artifactId>envrio</artifactId>
+	<groupId>com.enviro</groupId>
+	<artifactId>envriobankingapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>envrio</name>
 	<description>Banking Application for Enviro</description>
