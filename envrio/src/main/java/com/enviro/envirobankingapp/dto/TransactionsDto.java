@@ -1,7 +1,6 @@
-package com.envirobankingapp.envrio.dto;
+package com.enviro.envirobankingapp.dto;
 
-import com.envirobankingapp.envrio.enums.Accounts;
-import com.envirobankingapp.envrio.enums.Transactions;
+import com.enviro.envirobankingapp.enums.TransactionType;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,7 +11,7 @@ public class TransactionsDto {
 
     private UUID id;
     private Long accountNum;
-    private Transactions typeOfTransaction;
+    private TransactionType typeOfTransaction;
     private BigDecimal transactionAmount;
 
 

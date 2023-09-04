@@ -1,12 +1,12 @@
-package com.envirobankingapp.envrio.controllers;
+package com.enviro.envirobankingapp.controllers;
 
 
-import com.envirobankingapp.envrio.dto.TransactionsDto;
-import com.envirobankingapp.envrio.entities.Account;
-import com.envirobankingapp.envrio.exceptions.EntityNotFoundException;
-import com.envirobankingapp.envrio.exceptions.InsufficientFundsException;
-import com.envirobankingapp.envrio.services.AccountService;
-import com.envirobankingapp.envrio.services.impl.AccountServiceImpl;
+import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
+import com.enviro.envirobankingapp.dto.TransactionsDto;
+import com.enviro.envirobankingapp.entities.Account;
+import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
+import com.enviro.envirobankingapp.services.AccountService;
+import com.enviro.envirobankingapp.services.impl.AccountServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

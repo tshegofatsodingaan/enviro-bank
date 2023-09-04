@@ -1,5 +1,12 @@
+CREATE TABLE IF NOT EXISTS customer (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(50) NOT NULL,
+    surname VARCHAR(50) NOT NULL,
+    id_number BIGINT NOT NULL,
+    phone_number BIGINT NOT NULL
+);
 
-CREATE TABLE IF NOT EXISTS accounts (
+CREATE TABLE IF NOT EXISTS account (
     id SERIAL PRIMARY KEY NOT NULL,
     account_num SERIAL NOT NULL,
     account_type VARCHAR(50) NOT NULL,
@@ -7,12 +14,12 @@ CREATE TABLE IF NOT EXISTS accounts (
     account_balance VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS transactions (
+CREATE TABLE IF NOT EXISTS transaction (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     account_num SERIAL NOT NULL,
     type_of_transaction VARCHAR(50) NOT NULL,
     transaction_amount VARCHAR(50) NOT NULL,
     active BOOLEAN DEFAULT false,
-    account_id INTEGER REFERENCES accounts(id)
+    account_id INTEGER REFERENCES account(id)
 );
 

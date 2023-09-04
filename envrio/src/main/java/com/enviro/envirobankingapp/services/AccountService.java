@@ -1,7 +1,7 @@
-package com.envirobankingapp.envrio.services;
+package com.enviro.envirobankingapp.services;
 
-import com.envirobankingapp.envrio.entities.Account;
-import com.envirobankingapp.envrio.entities.Transaction;
+import com.enviro.envirobankingapp.entities.Transaction;
+import com.enviro.envirobankingapp.entities.Account;
 
 import java.math.BigDecimal;
 import java.util.List;

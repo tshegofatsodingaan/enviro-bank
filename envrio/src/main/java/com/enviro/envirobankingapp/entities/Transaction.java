@@ -1,6 +1,6 @@
-package com.envirobankingapp.envrio.entities;
+package com.enviro.envirobankingapp.entities;
 
-import com.envirobankingapp.envrio.enums.Transactions;
+import com.enviro.envirobankingapp.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(
-        name = "transactions"
+        name = "transaction"
 )
 public class Transaction {
     @Id
@@ -25,7 +25,7 @@ public class Transaction {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    private Transactions typeOfTransaction;
+    private TransactionType typeOfTransaction;
 
     private BigDecimal transactionAmount;
 

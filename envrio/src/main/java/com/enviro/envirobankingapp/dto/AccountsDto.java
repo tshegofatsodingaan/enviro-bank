@@ -1,6 +1,6 @@
-package com.envirobankingapp.envrio.dto;
+package com.enviro.envirobankingapp.dto;
 
-import com.envirobankingapp.envrio.enums.Accounts;
+import com.enviro.envirobankingapp.enums.AccountType;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,6 +10,6 @@ public class AccountsDto {
     private Long id;
     private Long accountNum;
     private String customerNum;
-    private Accounts accountType;
+    private AccountType accountType;
     private BigDecimal accountBalance;
 }

@@ -1,4 +1,4 @@
-package com.envirobankingapp.envrio.exceptions;
+package com.enviro.envirobankingapp.exceptions;
 
 public class EntityNotFoundException extends RuntimeException{
 

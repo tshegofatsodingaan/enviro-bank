@@ -1,4 +1,4 @@
-package com.envirobankingapp.envrio.dto;
+package com.enviro.envirobankingapp.dto;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

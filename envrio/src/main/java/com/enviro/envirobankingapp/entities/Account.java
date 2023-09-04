@@ -1,6 +1,6 @@
-package com.envirobankingapp.envrio.entities;
+package com.enviro.envirobankingapp.entities;
 
-import com.envirobankingapp.envrio.enums.Accounts;
+import com.enviro.envirobankingapp.enums.AccountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,10 +11,9 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table(
-        name = "accounts"
+        name = "account"
 )
 public class Account {
     @Id
@@ -26,7 +25,7 @@ public class Account {
     private String customerNum;
 
     @Enumerated(value = EnumType.STRING)
-    private Accounts accountType;
+    private AccountType accountType;
 
     private BigDecimal accountBalance;
 
