@@ -10,7 +10,7 @@ import java.util.UUID;
 public class TransactionsDto {
 
     private UUID id;
-    private Long accountNum;
+    private Integer accountNum;
     private TransactionType typeOfTransaction;
     private BigDecimal transactionAmount;
 
