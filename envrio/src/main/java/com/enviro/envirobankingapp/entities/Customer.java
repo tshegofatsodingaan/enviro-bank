@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Customer {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private UUID customerId;
+    private Long id;
     private String name;
     private String surname;
     private Long idNumber;
