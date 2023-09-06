@@ -1,5 +1,6 @@
 package com.enviro.envirobankingapp.services.impl;
 
+import com.enviro.envirobankingapp.dto.AccountsDto;
 import com.enviro.envirobankingapp.entities.Transaction;
 import com.enviro.envirobankingapp.enums.AccountType;
 import com.enviro.envirobankingapp.enums.TransactionType;
@@ -10,12 +11,16 @@ import com.enviro.envirobankingapp.repository.TransactionRepository;
 import com.enviro.envirobankingapp.services.AccountService;
 import com.enviro.envirobankingapp.dto.AccountConstants;
 import com.enviro.envirobankingapp.entities.Account;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -34,12 +39,12 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public void withdraw(Long accountNum, BigDecimal amountToWithdraw) {
+    public void withdraw(Integer accountNum, BigDecimal amountToWithdraw) {
 
         if (amountToWithdraw.compareTo(BigDecimal.ZERO) <= 0){
             throw new InsufficientFundsException("Cannot withdraw amount less than 0.");
         }else{
-            Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNum(accountNum));
+            Optional<Account> account = Optional.ofNullable((Account) accountRepository.findByAccountNum(accountNum));
             if(account.isPresent()){
                 this.account = account.get();
             }else{
@@ -67,6 +72,16 @@ public class AccountServiceImpl implements AccountService {
         newTransaction.setTransactionAmount(transaction.getTransactionAmount());
         newTransaction.setTypeOfTransaction(transaction.getTypeOfTransaction());
         newAccountInfo.setAccountBalance(balance);
+    }
+
+    private AccountsDto mapEntityToDto(Account account){
+        AccountsDto accountsResponse = new AccountsDto();
+        accountsResponse.setId(account.getId());
+        accountsResponse.setAccountBalance(account.getAccountBalance());
+        accountsResponse.setAccountNum(account.getAccountNum());
+        accountsResponse.setCustomerNum(account.getCustomerNum());
+        accountsResponse.setAccountType(account.getAccountType());
+        return accountsResponse;
     }
 
 
@@ -117,4 +132,29 @@ public class AccountServiceImpl implements AccountService {
             throw new EntityNotFoundException("Transaction does not exist.");
         }
     }
+
+    public List<AccountsDto> getAccounts(int pageNo, int pageSize){
+        // pageable instance
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Account> accounts = accountRepository.findAll(pageable);
+
+        // get content for page object
+        List<Account> listOfAccounts = accounts.getContent();
+        return listOfAccounts.stream().map(this::mapEntityToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public AccountsDto getAccountById(long id){
+        Account account = accountRepository.findById(id).orElseThrow();
+        return mapEntityToDto(account);
+
+    }
+
+/*    @Override
+    public List<AccountsDto> findAccountById(Long id){
+        Account account = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
+
+        return ;
+    }*/
+
 }

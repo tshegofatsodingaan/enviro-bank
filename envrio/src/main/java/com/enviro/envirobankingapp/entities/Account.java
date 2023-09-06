@@ -20,7 +20,7 @@ public class Account {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long accountNum;
+    private Integer accountNum;
 
     private String customerNum;
 
@@ -28,6 +28,10 @@ public class Account {
     private AccountType accountType;
 
     private BigDecimal accountBalance;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private Customer customerId;
 
 /*    @OneToMany(mappedBy = "accountEntity")
     private List<TransactionEntity> transactions = new ArrayList<>();*/

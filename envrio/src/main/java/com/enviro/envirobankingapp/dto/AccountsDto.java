@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 @Data
 public class AccountsDto {
     private Long id;
-    private Long accountNum;
+    private Integer accountNum;
     private String customerNum;
     private AccountType accountType;
     private BigDecimal accountBalance;
