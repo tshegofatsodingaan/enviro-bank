@@ -41,21 +41,22 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void withdraw(Integer accountNum, BigDecimal amountToWithdraw) {
 
-        if (amountToWithdraw.compareTo(BigDecimal.ZERO) <= 0){
+        if (amountToWithdraw.compareTo(BigDecimal.ZERO) <= 0)
             throw new InsufficientFundsException("Cannot withdraw amount less than 0.");
-        }else{
-            Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumAndActive(accountNum, true));
-            if(account.isPresent()){
-                this.account = account.get();
-            }else{
-                throw new EntityNotFoundException("This account does not exist.");
-            }
-            if (this.account.getAccountType() == AccountType.SAVINGS){
-                withdrawFromSavings(amountToWithdraw);
-            } if(this.account.getAccountType() == AccountType.CURRENT){
-                withdrawFromCurrent(amountToWithdraw);
-            }
-        }
+
+        Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumAndActive(accountNum, true));
+
+        if(!account.isPresent())
+            throw new EntityNotFoundException("This account does not exist.");
+
+        this.account = account.get();
+
+        if (this.account.getAccountType() == AccountType.SAVINGS)
+            withdrawFromSavings(amountToWithdraw);
+
+        if(this.account.getAccountType() == AccountType.CURRENT)
+            withdrawFromCurrent(amountToWithdraw);
+
 
         //dto to entity
         Transaction transaction = new Transaction();
@@ -89,12 +90,12 @@ public class AccountServiceImpl implements AccountService {
     private void withdrawFromSavings(BigDecimal amount){
         balance = account.getAccountBalance();
         BigDecimal subtractedAmount = balance.subtract(amount);
-        if(balance.compareTo(amount) > 0
-        && subtractedAmount.compareTo(accountConstants.minimum) >= 0) {
-            updateAccountEntity(subtractedAmount);
-        } else{
+
+        if(!(balance.compareTo(amount) > 0
+        && subtractedAmount.compareTo(accountConstants.minimum) >= 0)) {
             throw new InsufficientFundsException("Savings Account cannot contain amount less than a R" + accountConstants.minimum + ".");
         }
+        updateAccountEntity(subtractedAmount);
     }
 
 
@@ -102,11 +103,11 @@ public class AccountServiceImpl implements AccountService {
         balance = account.getAccountBalance();
         BigDecimal availableFunds = balance.add(accountConstants.overdraft);
         BigDecimal subtractedAmount = balance.subtract(amount);
-        if(amount.compareTo(availableFunds) < 0){
-            updateAccountEntity(subtractedAmount);
-        } else{
+
+        if(!(amount.compareTo(availableFunds) < 0)){
             throw new InsufficientFundsException("You have exceeded your limit.");
         }
+        updateAccountEntity(subtractedAmount);
     }
 
     public void updateAccountEntity(BigDecimal subtractedAmount){
@@ -124,42 +125,27 @@ public class AccountServiceImpl implements AccountService {
 
     public void softDelete(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
-        if(optionalAccount.isPresent()){
-            Account transaction = optionalAccount.orElseThrow();
-            transaction.setActive(false);
-            accountRepository.save(transaction);
 
-        } else{
+        if(!(optionalAccount.isPresent())){
             throw new EntityNotFoundException("Account does not exist.");
         }
+
+        Account transaction = optionalAccount.orElseThrow();
+        transaction.setActive(false);
+        accountRepository.save(transaction);
     }
 
     @Override
     public List<AccountsDto> getAccounts(int pageNo, int pageSize){
-        // pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Account> accounts = accountRepository.findAll(pageable);
 
-
-        // get content for page object
-        //        return listOfAccounts.stream().map(this::mapDtoToEntity).collect(Collectors.toList());
         return accounts.getContent().stream().map(this::mapEntityToDto).collect(Collectors.toList());
     }
 
     @Override
     public List<Account> getAccountById(Optional<Customer> id){
-//        Account account = accountRepository.findByCustomerId(id);
-
-
         return accountRepository.findByCustomerIdAndActive(id, true);
 
     }
-
-/*    @Override
-    public List<AccountsDto> findAccountById(Long id){
-        Account account = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
-
-        return ;
-    }*/
-
 }

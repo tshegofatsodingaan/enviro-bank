@@ -35,6 +35,7 @@ public class AccountController {
         }
     }
 
+
     @GetMapping
     public List<?> getAllAccounts(
             @RequestParam(value = "id", required = false) Long id,
@@ -42,10 +43,8 @@ public class AccountController {
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize){
         if(id != null){
             Optional<Customer> customerId = customerService.getCustomerById(id);
-            //            return accountTransferObj != null ? Collections.singletonList(accountTransferObj) : Collections.emptyList();
             return accountService.getAccountById(customerId);
         }
         return accountService.getAccounts(pageNo, pageSize);
-
     }
 }

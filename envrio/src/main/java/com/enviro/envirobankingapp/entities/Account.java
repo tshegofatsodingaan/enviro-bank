@@ -35,7 +35,4 @@ public class Account {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customerId;
 
-/*    @OneToMany(mappedBy = "accountEntity")
-    private List<TransactionEntity> transactions = new ArrayList<>();*/
-
 }

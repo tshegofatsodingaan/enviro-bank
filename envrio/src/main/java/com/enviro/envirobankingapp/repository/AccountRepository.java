@@ -11,8 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Account findByAccountNum(Integer accountNum);
-
     Account findByAccountNumAndActive(Integer accountNum, Boolean active);
     List<Account> findByCustomerIdAndActive(Optional<Customer> customerId, Boolean active);
 }

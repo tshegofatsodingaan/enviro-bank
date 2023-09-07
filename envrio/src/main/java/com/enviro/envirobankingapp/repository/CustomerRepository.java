@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-//    Customer findById(Long id);
 }

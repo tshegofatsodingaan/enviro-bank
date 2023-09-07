@@ -11,8 +11,6 @@ import java.util.UUID;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 
-//    List<Transaction> findByAccountNumAndActive(Account accountNum, Boolean deleted);
-
     List<Transaction> findByAccountNum(Account accountNum);
 
 }
