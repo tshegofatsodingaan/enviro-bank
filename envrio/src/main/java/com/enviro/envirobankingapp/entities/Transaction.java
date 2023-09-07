@@ -29,8 +29,6 @@ public class Transaction {
 
     private BigDecimal transactionAmount;
 
-    private Boolean active = true;
-
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "accountNum", referencedColumnName = "accountNum")
     private Account accountNum;

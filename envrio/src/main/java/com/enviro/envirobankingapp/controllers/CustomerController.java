@@ -2,8 +2,8 @@ package com.enviro.envirobankingapp.controllers;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.services.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDto> newCustomer(@RequestBody CustomerDto customerDto){
+    public ResponseEntity<CustomerDto> newCustomer(@RequestBody @Valid CustomerDto customerDto){
         return new ResponseEntity<>(customerService.createNewCustomer(customerDto), HttpStatus.CREATED);
     }
     @PutMapping("/{id}")

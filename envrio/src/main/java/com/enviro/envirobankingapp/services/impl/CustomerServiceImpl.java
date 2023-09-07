@@ -6,6 +6,8 @@ import com.enviro.envirobankingapp.repository.CustomerRepository;
 import com.enviro.envirobankingapp.services.CustomerService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -26,10 +28,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto updateCustomer(CustomerDto customerDto, long id){
         Customer customer = customerRepository.findById(id).orElseThrow();
-        mapEntityToDTO(customer);
+
+        customer.setName(customerDto.getName());
+        customer.setSurname(customerDto.getSurname());
+        customer.setIdNumber(customerDto.getIdNumber());
+        customer.setPhoneNumber(customerDto.getPhoneNumber());
 
         Customer updatedCustomer = customerRepository.save(customer);
         return mapEntityToDTO(updatedCustomer);
+    }
+
+    @Override
+    public Optional<Customer> getCustomerById(Long id) {
+        return customerRepository.findById(id);
     }
 
     private Customer mapDTOtoEntity(CustomerDto customerDto){

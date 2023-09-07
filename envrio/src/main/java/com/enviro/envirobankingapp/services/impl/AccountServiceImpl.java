@@ -1,6 +1,7 @@
 package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.dto.AccountsDto;
+import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.entities.Transaction;
 import com.enviro.envirobankingapp.enums.AccountType;
 import com.enviro.envirobankingapp.enums.TransactionType;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,6 +81,7 @@ public class AccountServiceImpl implements AccountService {
         accountsResponse.setAccountNum(account.getAccountNum());
         accountsResponse.setCustomerNum(account.getCustomerNum());
         accountsResponse.setAccountType(account.getAccountType());
+        accountsResponse.setActive(account.getActive());
         return accountsResponse;
     }
 
@@ -117,36 +118,40 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Transaction> getTransactionsByAccountNumber(Account accountNum) {
-        return transactionRepository.findByAccountNumAndActive(accountNum, true);
+        return transactionRepository.findByAccountNum(accountNum);
     }
 
 
-    public void softDelete(UUID id) {
-        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
-        if(optionalTransaction.isPresent()){
-            Transaction transaction = optionalTransaction.orElseThrow();
+    public void softDelete(Long id) {
+        Optional<Account> optionalAccount = accountRepository.findById(id);
+        if(optionalAccount.isPresent()){
+            Account transaction = optionalAccount.orElseThrow();
             transaction.setActive(false);
-            transactionRepository.save(transaction);
+            accountRepository.save(transaction);
 
         } else{
-            throw new EntityNotFoundException("Transaction does not exist.");
+            throw new EntityNotFoundException("Account does not exist.");
         }
     }
 
+    @Override
     public List<AccountsDto> getAccounts(int pageNo, int pageSize){
         // pageable instance
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Account> accounts = accountRepository.findAll(pageable);
 
+
         // get content for page object
-        List<Account> listOfAccounts = accounts.getContent();
-        return listOfAccounts.stream().map(this::mapEntityToDto).collect(Collectors.toList());
+        //        return listOfAccounts.stream().map(this::mapDtoToEntity).collect(Collectors.toList());
+        return accounts.getContent().stream().map(this::mapEntityToDto).collect(Collectors.toList());
     }
 
     @Override
-    public AccountsDto getAccountById(long id){
-        Account account = accountRepository.findById(id).orElseThrow();
-        return mapEntityToDto(account);
+    public List<Account> getAccountById(Optional<Customer> id){
+//        Account account = accountRepository.findByCustomerId(id);
+
+
+        return accountRepository.findByCustomerIdAndActive(id, true);
 
     }
 

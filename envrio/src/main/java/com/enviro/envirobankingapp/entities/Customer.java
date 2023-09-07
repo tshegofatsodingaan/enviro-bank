@@ -20,7 +20,7 @@ public class Customer {
     private Long id;
     private String name;
     private String surname;
-    private Long idNumber;
-    private Long phoneNumber;
+    private String idNumber;
+    private String phoneNumber;
 
 }

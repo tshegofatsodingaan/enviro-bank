@@ -12,4 +12,5 @@ public class AccountsDto {
     private String customerNum;
     private AccountType accountType;
     private BigDecimal accountBalance;
+    private Boolean active;
 }
