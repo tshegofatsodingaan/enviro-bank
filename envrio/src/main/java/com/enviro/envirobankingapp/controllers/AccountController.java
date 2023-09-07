@@ -2,8 +2,6 @@ package com.enviro.envirobankingapp.controllers;
 
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
-import com.enviro.envirobankingapp.dto.TransactionsDto;
-import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
 import com.enviro.envirobankingapp.services.AccountService;
 import com.enviro.envirobankingapp.services.CustomerService;
 import com.enviro.envirobankingapp.services.impl.AccountServiceImpl;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/accounts")

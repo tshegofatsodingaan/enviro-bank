@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findByAccountNum(Integer accountNum);
 
-//    List<Account> findByAccountNumAndActive(Account accountNum, Boolean deleted);
+    Account findByAccountNumAndActive(Integer accountNum, Boolean active);
     List<Account> findByCustomerIdAndActive(Optional<Customer> customerId, Boolean active);
 }

@@ -44,11 +44,11 @@ public class AccountServiceImpl implements AccountService {
         if (amountToWithdraw.compareTo(BigDecimal.ZERO) <= 0){
             throw new InsufficientFundsException("Cannot withdraw amount less than 0.");
         }else{
-            Optional<Account> account = Optional.ofNullable((Account) accountRepository.findByAccountNum(accountNum));
+            Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumAndActive(accountNum, true));
             if(account.isPresent()){
                 this.account = account.get();
             }else{
-                throw new EntityNotFoundException("Enter existing account.");
+                throw new EntityNotFoundException("This account does not exist.");
             }
             if (this.account.getAccountType() == AccountType.SAVINGS){
                 withdrawFromSavings(amountToWithdraw);
