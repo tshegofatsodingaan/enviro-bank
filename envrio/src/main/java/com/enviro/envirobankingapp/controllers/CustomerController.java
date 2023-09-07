@@ -1,6 +1,7 @@
 package com.enviro.envirobankingapp.controllers;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
+import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.services.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,13 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.createNewCustomer(customerDto), HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDto> updateCustomer(@RequestBody @Valid CustomerDto customerDto, @PathVariable(name = "id") long id){
-        CustomerDto customerResponse = customerService.updateCustomer(customerDto, id);
-        return new ResponseEntity<>(customerResponse, HttpStatus.OK);
+    public ResponseEntity<?> updateCustomer(@RequestBody @Valid CustomerDto customerDto, @PathVariable(name = "id") long id){
+        try{
+            CustomerDto customerResponse = customerService.updateCustomer(customerDto, id);
+            return new ResponseEntity<>(customerResponse, HttpStatus.OK);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 }

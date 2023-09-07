@@ -45,6 +45,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+    /***
+     * Performs a withdrawal based on type of account
+     * @param accountNum Specific to an account
+     * @param amountToWithdraw Subtracted from balance
+     */
     @Override
     public void withdraw(Integer accountNum, BigDecimal amountToWithdraw) {
 
@@ -87,6 +92,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+    /***
+     * Performs withdrawal from savings account
+     * @param amount Amount to withdraw
+     */
     private void withdrawFromSavings(BigDecimal amount){
         balance = account.getAccountBalance();
         BigDecimal subtractedAmount = balance.subtract(amount);
@@ -99,6 +108,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+    /***
+     * Performs withdrawal from current account
+     * @param amount Amount to withdraw
+     */
     private void withdrawFromCurrent(BigDecimal amount){
         balance = account.getAccountBalance();
         BigDecimal availableFunds = balance.add(accountConstants.overdraft);
@@ -109,6 +122,7 @@ public class AccountServiceImpl implements AccountService {
         }
         updateAccountEntity(subtractedAmount);
     }
+
 
     public void updateAccountEntity(BigDecimal subtractedAmount){
         balance = subtractedAmount;
@@ -123,6 +137,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
 
+    /***
+     * Deactivates an account specific to a customer
+     * @param id Specific customer
+     */
     public void softDelete(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
 
@@ -135,6 +153,13 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(transaction);
     }
 
+
+    /***
+     * Retrieves all accounts from Enviro Bank
+     * @param pageNo Page number
+     * @param pageSize Number of items in the page
+     * @return Accounts in a form of a list
+     */
     @Override
     public List<AccountDto> getAccounts(int pageNo, int pageSize){
         Pageable pageable = PageRequest.of(pageNo, pageSize);
@@ -143,6 +168,12 @@ public class AccountServiceImpl implements AccountService {
         return accounts.getContent().stream().map(this::mapEntityToDto).collect(Collectors.toList());
     }
 
+
+    /***
+     * Retrieves account(s) specific to a customer
+     * @param id Specific customer
+     * @return Account(s) in a form of a list
+     */
     @Override
     public List<Account> getAccountById(Optional<Customer> id){
         return accountRepository.findByCustomerIdAndActive(id, true);
