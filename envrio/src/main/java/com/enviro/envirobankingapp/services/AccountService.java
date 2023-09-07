@@ -1,6 +1,6 @@
 package com.enviro.envirobankingapp.services;
 
-import com.enviro.envirobankingapp.dto.AccountsDto;
+import com.enviro.envirobankingapp.dto.AccountDto;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.entities.Transaction;
 import com.enviro.envirobankingapp.entities.Account;
@@ -14,7 +14,7 @@ public interface AccountService {
     List<Transaction> getTransactionsByAccountNumber(Account accountNum);
     void softDelete(Long accountNum);
 
-    List<AccountsDto> getAccounts(int pageNo, int pageSize);
+    List<AccountDto> getAccounts(int pageNo, int pageSize);
 
     List<Account> getAccountById(Optional<Customer> id);
 

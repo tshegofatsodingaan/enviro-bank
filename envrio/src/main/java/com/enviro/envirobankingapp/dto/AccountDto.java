@@ -6,7 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class AccountsDto {
+public class AccountDto {
     private Long id;
     private Integer accountNum;
     private String customerNum;

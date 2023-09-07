@@ -1,6 +1,6 @@
 package com.enviro.envirobankingapp.controllers;
 
-import com.enviro.envirobankingapp.dto.TransactionsDto;
+import com.enviro.envirobankingapp.dto.TransactionDto;
 import com.enviro.envirobankingapp.entities.Account;
 import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
 import com.enviro.envirobankingapp.services.AccountService;
@@ -19,10 +19,10 @@ public class TransactionController {
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionsDto transactionsDto){
+    public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionDto transactionDto){
 
         try{
-            accountService.withdraw(transactionsDto.getAccountNum(), transactionsDto.getTransactionAmount());
+            accountService.withdraw(transactionDto.getAccountNum(), transactionDto.getTransactionAmount());
             return ResponseEntity.ok("withdraw was successful.");
         } catch (InsufficientFundsException e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

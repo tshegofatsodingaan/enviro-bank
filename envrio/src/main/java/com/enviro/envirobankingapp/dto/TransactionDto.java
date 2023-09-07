@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
-public class TransactionsDto {
+public class TransactionDto {
 
     private UUID id;
     private Integer accountNum;

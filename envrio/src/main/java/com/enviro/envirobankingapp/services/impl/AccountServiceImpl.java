@@ -1,6 +1,6 @@
 package com.enviro.envirobankingapp.services.impl;
 
-import com.enviro.envirobankingapp.dto.AccountsDto;
+import com.enviro.envirobankingapp.dto.AccountDto;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.entities.Transaction;
 import com.enviro.envirobankingapp.enums.AccountType;
@@ -12,6 +12,7 @@ import com.enviro.envirobankingapp.repository.TransactionRepository;
 import com.enviro.envirobankingapp.services.AccountService;
 import com.enviro.envirobankingapp.dto.AccountConstants;
 import com.enviro.envirobankingapp.entities.Account;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,13 +29,19 @@ public class AccountServiceImpl implements AccountService {
     private  final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final AccountConstants accountConstants;
+
+    private final ModelMapper modelMapper;
     BigDecimal balance;
 
 
-    public AccountServiceImpl(TransactionRepository transactionRepository, AccountRepository accountRepository, AccountConstants accountConstants) {
+    public AccountServiceImpl(TransactionRepository transactionRepository,
+                              AccountRepository accountRepository,
+                              AccountConstants accountConstants,
+                              ModelMapper modelMapper) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
         this.accountConstants = accountConstants;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -46,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
 
         Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumAndActive(accountNum, true));
 
-        if(!account.isPresent())
+        if(account.isEmpty())
             throw new EntityNotFoundException("This account does not exist.");
 
         this.account = account.get();
@@ -75,15 +82,8 @@ public class AccountServiceImpl implements AccountService {
         newAccountInfo.setAccountBalance(balance);
     }
 
-    private AccountsDto mapEntityToDto(Account account){
-        AccountsDto accountsResponse = new AccountsDto();
-        accountsResponse.setId(account.getId());
-        accountsResponse.setAccountBalance(account.getAccountBalance());
-        accountsResponse.setAccountNum(account.getAccountNum());
-        accountsResponse.setCustomerNum(account.getCustomerNum());
-        accountsResponse.setAccountType(account.getAccountType());
-        accountsResponse.setActive(account.getActive());
-        return accountsResponse;
+    private AccountDto mapEntityToDto(Account account){
+        return modelMapper.map(account, AccountDto.class);
     }
 
 
@@ -126,7 +126,7 @@ public class AccountServiceImpl implements AccountService {
     public void softDelete(Long id) {
         Optional<Account> optionalAccount = accountRepository.findById(id);
 
-        if(!(optionalAccount.isPresent())){
+        if(optionalAccount.isEmpty()){
             throw new EntityNotFoundException("Account does not exist.");
         }
 
@@ -136,7 +136,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<AccountsDto> getAccounts(int pageNo, int pageSize){
+    public List<AccountDto> getAccounts(int pageNo, int pageSize){
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<Account> accounts = accountRepository.findAll(pageable);
 
