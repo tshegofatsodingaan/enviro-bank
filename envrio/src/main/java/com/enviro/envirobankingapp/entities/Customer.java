@@ -14,10 +14,5 @@ import java.util.UUID;
         name = "customer"
 )
 public class Customer extends User {
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String idNumber;
-    private String phoneNumber;
 
 }
