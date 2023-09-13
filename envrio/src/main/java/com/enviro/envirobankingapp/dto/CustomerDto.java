@@ -1,6 +1,6 @@
 package com.enviro.envirobankingapp.dto;
 
-import com.enviro.envirobankingapp.enums.Role;
+import com.enviro.envirobankingapp.enums.UserRole;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -16,5 +16,5 @@ public class CustomerDto {
     private String phoneNumber;
     private String email;
     private String password;
-    private Role role;
+    private UserRole userRole;
 }

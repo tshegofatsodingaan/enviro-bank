@@ -19,3 +19,4 @@ ALTER TABLE customer DROP COLUMN phone_number;
 
 ALTER TABLE customer
     ADD CONSTRAINT customer FOREIGN KEY (id) REFERENCES "user"(id);
+

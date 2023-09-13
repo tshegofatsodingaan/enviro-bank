@@ -4,6 +4,7 @@ import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.repository.CustomerRepository;
+import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -14,11 +15,14 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper){
+    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, ModelMapper modelMapper){
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -31,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto createNewCustomer(CustomerDto customerDto) {
         Customer customer = mapDTOtoEntity(customerDto);
-        Customer newCustomer = customerRepository.save(customer);
+        Customer newCustomer = userRepository.save(customer);
 
         return mapEntityToDTO(newCustomer);
     }
