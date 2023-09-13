@@ -1,6 +1,6 @@
 package com.enviro.envirobankingapp.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.enviro.envirobankingapp.enums.Role;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -14,4 +14,7 @@ public class CustomerDto {
     private String idNumber;
     @Pattern(regexp = "\\d{10}",message = "Invalid phone number.")
     private String phoneNumber;
+    private String email;
+    private String password;
+    private Role role;
 }

@@ -1,5 +1,6 @@
 package com.enviro.envirobankingapp.entities;
 
+import com.enviro.envirobankingapp.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,5 +33,5 @@ public abstract class User {
     private String phoneNumber;
 
     @Enumerated(value = EnumType.STRING)
-    private String role;
+    private Role role;
 }
