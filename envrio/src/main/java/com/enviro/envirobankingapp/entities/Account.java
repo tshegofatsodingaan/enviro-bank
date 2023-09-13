@@ -33,6 +33,7 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    // field name should be "customer"
     private Customer customerId;
 
 }

@@ -7,4 +7,6 @@ CREATE TABLE IF NOT EXISTS customer (
 );
 
 ALTER TABLE account
-ADD customer_id INTEGER REFERENCES customer(id);
+ADD customer_id INTEGER,
+    ADD CONSTRAINT customer FOREIGN KEY (customer_id) REFERENCES customer(id);
+

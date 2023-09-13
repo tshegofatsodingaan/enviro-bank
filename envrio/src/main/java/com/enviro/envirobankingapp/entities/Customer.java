@@ -1,25 +1,22 @@
 package com.enviro.envirobankingapp.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(
         name = "customer"
 )
-public class Customer {
+public class Customer extends User {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String surname;
     private String idNumber;
     private String phoneNumber;
 

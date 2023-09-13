@@ -157,7 +157,7 @@ public class AccountServiceImpl implements AccountService {
     /***
      * Retrieves all accounts from Enviro Bank
      * @param pageNo Page number
-     * @param pageSize Number of items in the page
+     * @param pageSize Number of items in a page
      * @return Accounts in a form of a list
      */
     @Override

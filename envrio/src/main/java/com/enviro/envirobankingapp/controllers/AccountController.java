@@ -39,12 +39,12 @@ public class AccountController {
     @GetMapping
     public List<?> getAllAccounts(
             @RequestParam(value = "id", required = false) Long id,
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize){
         if(id != null){
             Optional<Customer> customerId = customerService.getCustomerById(id);
             return accountService.getAccountById(customerId);
         }
-        return accountService.getAccounts(pageNo, pageSize);
+        return accountService.getAccounts(pageNumber, pageSize);
     }
 }
