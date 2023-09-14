@@ -19,3 +19,6 @@ spring:
 account-constants:
   minimum: 1000.00
   overdraft: 10000.00
+
+eb:
+  jwtSecret: ByCoZ1VLVlASqsOgZ9a1vfN3jl+P0Kt152JBTcC41T4=

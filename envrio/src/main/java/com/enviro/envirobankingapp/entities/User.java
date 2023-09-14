@@ -10,11 +10,12 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(
-        name = "user"
+        name = "users"
 )
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class User {
     @Id
+    @Column(name = "id")
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -30,6 +31,6 @@ public abstract class User {
 
     private String phoneNumber;
 
-    @Enumerated(value = EnumType.STRING)
-    private UserRole userRole;
+/*    @Enumerated(value = EnumType.STRING)
+    private UserRole userRole;*/
 }
