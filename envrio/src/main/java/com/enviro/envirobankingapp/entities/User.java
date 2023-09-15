@@ -4,6 +4,9 @@ import com.enviro.envirobankingapp.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,6 +34,6 @@ public abstract class User {
 
     private String phoneNumber;
 
-/*    @Enumerated(value = EnumType.STRING)
-    private UserRole userRole;*/
+//    @Enumerated(value = EnumType.STRING)
+//    private Set<UserRole> roles = new HashSet<>();
 }

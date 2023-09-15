@@ -1,10 +1,11 @@
 package com.enviro.envirobankingapp.services;
 
+import com.enviro.envirobankingapp.dto.AuthResponse;
 import com.enviro.envirobankingapp.dto.SignInRequest;
-import com.enviro.envirobankingapp.dto.SignUpResponse;
+import com.enviro.envirobankingapp.dto.SignInResponse;
 
 public interface AuthService {
 
-    SignUpResponse signIn(SignInRequest signInRequest);
+    AuthResponse signIn(SignInRequest signInRequest);
 
 }
