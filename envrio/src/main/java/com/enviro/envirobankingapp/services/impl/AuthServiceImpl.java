@@ -3,6 +3,7 @@ package com.enviro.envirobankingapp.services.impl;
 import com.enviro.envirobankingapp.dto.AuthResponse;
 import com.enviro.envirobankingapp.dto.SignInRequest;
 import com.enviro.envirobankingapp.dto.SignInResponse;
+import com.enviro.envirobankingapp.entities.Role;
 import com.enviro.envirobankingapp.entities.User;
 import com.enviro.envirobankingapp.enums.UserRole;
 import com.enviro.envirobankingapp.services.AuthService;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -41,7 +43,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private AuthResponse createAuthResponse(User user) {
-        return new AuthResponse(jwtSecurityUtil.generateToken(user.getName()));
+        Set<UserRole> userRoles = user.getRoles().stream().map(Role::getName)
+                .collect(Collectors.toSet());
+        return new AuthResponse(jwtSecurityUtil.generateToken(user.getName(), userRoles));
     }
 
 }

@@ -4,7 +4,9 @@ import com.enviro.envirobankingapp.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -34,6 +36,7 @@ public abstract class User {
 
     private String phoneNumber;
 
-//    @Enumerated(value = EnumType.STRING)
-//    private Set<UserRole> roles = new HashSet<>();
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "fk_user_id")
+    private Set<Role> roles = new HashSet<>();
 }
