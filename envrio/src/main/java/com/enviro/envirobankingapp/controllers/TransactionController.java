@@ -6,6 +6,7 @@ import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
 import com.enviro.envirobankingapp.services.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,7 @@ public class TransactionController {
         this.accountService = accountService;
     }
 
+    @PreAuthorize(value = "hasRole({'USER'})")
     @PostMapping("/withdraw")
     public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionDto transactionDto){
 
@@ -29,6 +31,7 @@ public class TransactionController {
         }
     }
 
+    @PreAuthorize(value = "hasRole({'USER'})")
     @GetMapping("{accountNum}")
     public ResponseEntity<?> getTransactionsByAccountNum(@PathVariable Account accountNum){
         return ResponseEntity.ok(accountService.getTransactionsByAccountNumber(accountNum));

@@ -26,6 +26,7 @@ public class AccountController {
     }
 
 
+    @PreAuthorize(value = "hasRole({'USER'})")
     @DeleteMapping("/{accountId}")
     public ResponseEntity<String> softDeletion(@PathVariable Long accountId){
         try{
@@ -36,7 +37,7 @@ public class AccountController {
         }
     }
 
-    @PreAuthorize(value = "hasRole({'ADMIN'})")
+    @PreAuthorize(value = "hasRole({'USER'})")
     @GetMapping("/any")
     public List<?> getAllAccounts(
             @RequestParam(value = "id", required = false) Long id,

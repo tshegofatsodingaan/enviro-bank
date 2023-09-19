@@ -24,6 +24,8 @@ public class CustomerController {
     public ResponseEntity<CustomerDto> newCustomer(@RequestBody @Valid CustomerDto customerDto){
         return new ResponseEntity<>(customerService.createNewCustomer(customerDto), HttpStatus.CREATED);
     }
+
+    @PreAuthorize(value = "hasRole({'ADMIN'})")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCustomer(@RequestBody @Valid CustomerDto customerDto, @PathVariable(name = "id") long id){
         try{
