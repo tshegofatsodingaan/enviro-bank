@@ -1,7 +1,11 @@
 package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.entities.Admin;
+import com.enviro.envirobankingapp.entities.Role;
+import com.enviro.envirobankingapp.entities.UserEntity;
+import com.enviro.envirobankingapp.enums.UserRole;
 import com.enviro.envirobankingapp.repository.AdminRepository;
+import com.enviro.envirobankingapp.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,26 +14,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final AdminRepository adminRepository;
-
+    private final UserRepository userRepository;
     private Admin admin;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        admin = adminRepository.findAdminByName(username)
-                .orElseThrow(() -> new RuntimeException("Could not find user with username " + username));
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByNameOrEmail(usernameOrEmail, usernameOrEmail) //change to user
+                .orElseThrow(() -> new RuntimeException("Could not find user with username or email: " + usernameOrEmail));
 
-        return new org.springframework.security.core.userdetails.User(admin.getEmail(), admin.getPassword(),
-                Collections.EMPTY_LIST);
+        Set<String> roles = userEntity.getRoles().stream().map(Role::getName).map(UserRole::name).collect(Collectors.toSet());
+
+        return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(),
+                getAuthorities(roles));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Collection<String> roles) {

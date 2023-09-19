@@ -1,10 +1,10 @@
 package com.enviro.envirobankingapp.services;
 
-import com.enviro.envirobankingapp.entities.User;
+import com.enviro.envirobankingapp.entities.UserEntity;
 
 import java.util.Optional;
 
 public interface UserService {
 
-    Optional<User> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 }

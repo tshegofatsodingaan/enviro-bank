@@ -7,6 +7,7 @@ import com.enviro.envirobankingapp.services.CustomerService;
 import com.enviro.envirobankingapp.services.impl.AccountServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +36,8 @@ public class AccountController {
         }
     }
 
-
-    @GetMapping
+    @PreAuthorize(value = "hasRole({'ADMIN'})")
+    @GetMapping("/any")
     public List<?> getAllAccounts(
             @RequestParam(value = "id", required = false) Long id,
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,

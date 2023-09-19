@@ -3,8 +3,6 @@ package com.enviro.envirobankingapp.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,6 +10,6 @@ import java.util.UUID;
 @Table(
         name = "customer"
 )
-public class Customer extends User {
+public class Customer extends UserEntity {
 
 }

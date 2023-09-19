@@ -1,12 +1,9 @@
 package com.enviro.envirobankingapp.entities;
 
-import com.enviro.envirobankingapp.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -18,7 +15,7 @@ import java.util.Set;
         name = "users"
 )
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User {
+public abstract class UserEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue( strategy = GenerationType.IDENTITY)
@@ -36,7 +33,7 @@ public abstract class User {
 
     private String phoneNumber;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_user_id")
     private Set<Role> roles = new HashSet<>();
 }

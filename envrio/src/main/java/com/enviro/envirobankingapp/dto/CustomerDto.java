@@ -15,6 +15,4 @@ public class CustomerDto {
     @Pattern(regexp = "\\d{10}",message = "Invalid phone number.")
     private String phoneNumber;
     private String email;
-    private String password;
-    private UserRole userRole;
 }

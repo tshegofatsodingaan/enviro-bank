@@ -1,6 +1,6 @@
 package com.enviro.envirobankingapp.services.impl;
 
-import com.enviro.envirobankingapp.entities.User;
+import com.enviro.envirobankingapp.entities.UserEntity;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.UserService;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<UserEntity> findByEmail(String email) {
         return userRepository.findByName(email);
     }
 }

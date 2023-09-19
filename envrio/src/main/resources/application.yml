@@ -22,3 +22,4 @@ account-constants:
 
 eb:
   jwtSecret: ByCoZ1VLVlASqsOgZ9a1vfN3jl+P0Kt152JBTcC41T4=
+  jwtExpirationDate: 604800000

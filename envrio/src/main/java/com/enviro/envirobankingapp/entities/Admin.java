@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
 @Table(
         name = "admin"
 )
-public class Admin extends User{
+public class Admin extends UserEntity {
 
 }

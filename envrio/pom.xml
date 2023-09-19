@@ -153,7 +153,7 @@
 				<version>9.21.1</version>
 				<configuration>
 					<url>jdbc:postgresql://localhost:5432/eba_db</url>
-					<user>enviro_ba_user</user>
+					<userEntity>enviro_ba_user</userEntity>
 					<password>localpasswd</password>
 					<cleanDisabled>false</cleanDisabled>
 				</configuration>
