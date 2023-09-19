@@ -4,3 +4,5 @@ CREATE TABLE IF NOT EXISTS roles (
     fk_user_id INTEGER,
     FOREIGN KEY (fk_user_id) REFERENCES users(id)
 );
+
+ALTER TABLE users ALTER COLUMN password DROP NOT NULL;

@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -20,15 +19,13 @@ public class WebSecurityConfig {
 
     private final JwtSecurityFilter jwtSecurityFilter;
 
-    private final UserDetailsService userDetailsService;
 
     public static final String[] ENDPOINTS_WHITELIST = {
             "/api/v1/auth/**"
     };
 
-    public WebSecurityConfig(JwtSecurityFilter jwtSecurityFilter, UserDetailsService userDetailsService) {
+    public WebSecurityConfig(JwtSecurityFilter jwtSecurityFilter) {
         this.jwtSecurityFilter = jwtSecurityFilter;
-        this.userDetailsService = userDetailsService;
     }
 
     @Bean

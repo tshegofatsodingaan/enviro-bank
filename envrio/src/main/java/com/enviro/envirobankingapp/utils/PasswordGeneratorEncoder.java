@@ -8,5 +8,6 @@ public class PasswordGeneratorEncoder {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         System.out.println(passwordEncoder.encode("1234"));
         System.out.println(passwordEncoder.encode("5678"));
+        System.out.println(passwordEncoder.encode("tshego"));
     }
 }
