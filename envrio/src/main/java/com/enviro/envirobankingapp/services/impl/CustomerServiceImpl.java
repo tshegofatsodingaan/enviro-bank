@@ -44,6 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto createNewCustomer(CustomerDto customerDto) {
         boolean userExists = userRepository.findByEmail(customerDto.getEmail()).isPresent();
+
         if (userExists){
            throw new IllegalStateException("email already exists");
         }

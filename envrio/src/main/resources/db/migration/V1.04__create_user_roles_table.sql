@@ -6,3 +6,6 @@ CREATE TABLE IF NOT EXISTS roles (
 );
 
 ALTER TABLE users ALTER COLUMN password DROP NOT NULL;
+
+ALTER TABLE users ADD UNIQUE (id_number);
+ALTER TABLE users ADD UNIQUE (phone_number);
