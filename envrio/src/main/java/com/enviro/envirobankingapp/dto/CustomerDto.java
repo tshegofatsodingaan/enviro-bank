@@ -1,6 +1,5 @@
 package com.enviro.envirobankingapp.dto;
 
-import com.enviro.envirobankingapp.enums.UserRole;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -15,7 +14,7 @@ public class CustomerDto {
     private String idNumber;
     @Pattern(regexp = "^0[0-9]{9}$",message = "Please enter valid phone number, without the country code.")
     private String phoneNumber;
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Please enter a valid email address.")
     private String email;
 }
 
-// 0207290750083

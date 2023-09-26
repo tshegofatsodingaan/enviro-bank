@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class    AccountServiceImpl implements AccountService {
     private Account account;
     private  final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;

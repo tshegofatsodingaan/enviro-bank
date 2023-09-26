@@ -3,8 +3,11 @@ package com.enviro.envirobankingapp.services.impl;
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.email.EmailSender;
 import com.enviro.envirobankingapp.entities.Customer;
+import com.enviro.envirobankingapp.entities.Role;
+import com.enviro.envirobankingapp.enums.UserRole;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.repository.CustomerRepository;
+import com.enviro.envirobankingapp.repository.RoleRepository;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.CustomerService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,6 +24,8 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
     private final EmailSender emailSender;
 
@@ -28,9 +33,10 @@ public class CustomerServiceImpl implements CustomerService {
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, ModelMapper modelMapper, EmailSender emailSender){
+    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, EmailSender emailSender){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
         this.emailSender = emailSender;
     }
@@ -43,18 +49,20 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerDto createNewCustomer(CustomerDto customerDto) {
+
         boolean userExists = userRepository.findByEmail(customerDto.getEmail()).isPresent();
 
         if (userExists){
            throw new IllegalStateException("email already exists");
         }
         String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
-        String encodedPassword = passwordEncoder.encode(generatedPassword);
-
+        System.out.println(generatedPassword);
         Customer customer = mapDTOtoEntity(customerDto);
-        customer.setPassword(encodedPassword);
-        Customer newCustomer = userRepository.save(customer);
+        customer.setPassword(passwordEncoder.encode(generatedPassword));
+
+        Customer newCustomer = customerRepository.save(customer);
         emailSender.send(customerDto.getEmail(), buildEmail(customerDto.getName(), generatedPassword));
+        System.out.println(generatedPassword);
         return mapEntityToDTO(newCustomer);
     }
 
@@ -147,7 +155,7 @@ public class CustomerServiceImpl implements CustomerService {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Your temporary password is: " +generatedPassword+ ". Please use your email to sign in.  </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\" \">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Your temporary password is: " +password+ ". Please use your email to sign in.  </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\" \">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

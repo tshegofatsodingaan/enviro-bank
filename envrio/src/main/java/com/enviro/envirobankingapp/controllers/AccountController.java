@@ -38,7 +38,7 @@ public class AccountController {
     }
 
     @PreAuthorize(value = "hasRole({'USER'})")
-    @GetMapping("/any")
+    @GetMapping()
     public List<?> getAllAccounts(
             @RequestParam(value = "id", required = false) Long id,
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,

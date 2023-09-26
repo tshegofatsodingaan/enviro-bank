@@ -3,7 +3,6 @@ package com.enviro.envirobankingapp.entities;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.stereotype.Component;
-
 @Component
 @Getter
 @Setter

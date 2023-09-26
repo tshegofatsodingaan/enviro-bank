@@ -7,6 +7,7 @@ import com.enviro.envirobankingapp.enums.UserRole;
 import com.enviro.envirobankingapp.repository.AdminRepository;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,22 +26,21 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private Admin admin;
 
+
+
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByNameOrEmail(usernameOrEmail, usernameOrEmail) //change to user
                 .orElseThrow(() -> new RuntimeException("Could not find user with username or email: " + usernameOrEmail));
 
-        Set<String> roles = userEntity.getRoles().stream().map(Role::getName).map(UserRole::name).collect(Collectors.toSet());
+        Set<GrantedAuthority> authorities = userEntity
+                .getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_"+role.getName())).collect(Collectors.toSet());
+
 
         return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(),
-                getAuthorities(roles));
+                authorities);
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Collection<String> roles) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (String role: roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-        }
-        return authorities;
-    }
 }
