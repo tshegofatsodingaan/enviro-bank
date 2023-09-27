@@ -8,6 +8,7 @@ import com.enviro.envirobankingapp.repository.CustomerRepository;
 import com.enviro.envirobankingapp.repository.RoleRepository;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.CustomerService;
+import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,13 +29,16 @@ public class CustomerServiceImpl implements CustomerService {
     private final EmailSender emailSender;
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+    private final JwtSecurityUtil jwtSecurityUtil;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, EmailSender emailSender){
+
+    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, EmailSender emailSender, JwtSecurityUtil jwtSecurityUtil){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
         this.emailSender = emailSender;
+        this.jwtSecurityUtil = jwtSecurityUtil;
     }
 
 
@@ -51,12 +55,17 @@ public class CustomerServiceImpl implements CustomerService {
         if (userExists){
            throw new IllegalStateException("email already exists");
         }
+
         String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
         Customer customer = mapDTOtoEntity(customerDto);
         customer.setPassword(passwordEncoder.encode(generatedPassword));
 
         Customer newCustomer = customerRepository.save(customer);
-        emailSender.sendToNewUser(customerDto.getEmail(), customerDto, generatedPassword);
+
+        String resetToken = jwtSecurityUtil.generateToken(customerDto.getName(), customerDto.getEmail());
+        String link = "http://localhost:9005/api/v1/auth/change-password?token=" + resetToken;
+        emailSender.sendToResetPassword(customerDto.getEmail(), customerDto, generatedPassword, link);
+//        emailSender.sendToNewUser(customerDto.getEmail(), customerDto, generatedPassword);
         return mapEntityToDTO(newCustomer);
     }
 

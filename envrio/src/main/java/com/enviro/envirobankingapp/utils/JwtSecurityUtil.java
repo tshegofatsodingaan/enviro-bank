@@ -59,7 +59,6 @@ public class JwtSecurityUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);
         claims.put("role", roles);
-        System.out.println(roles);
         return createToken(claims, username);
     }
 
@@ -69,8 +68,22 @@ public class JwtSecurityUtil {
                 .signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
     }
 
+    public String generateToken(String username, String email) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", email);
+        return createNewToken(claims, username);
+    }
+
+    private String createNewToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 60000)) // ONE MINUTE
+                .signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
+    }
+
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractEmail(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
 }

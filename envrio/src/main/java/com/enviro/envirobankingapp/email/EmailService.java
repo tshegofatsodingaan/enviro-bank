@@ -51,17 +51,22 @@ public class EmailService implements EmailSender{
     }
 
     @Override
-    public void sendToResetPassword(String to){
+    public void sendToResetPassword(String to, CustomerDto customerDto, String password, String link){
         try{
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,
                     MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                     "utf-8");
 
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("link", link);
+            variables.put("name", customerDto.getName());
+            variables.put("password", password);
+
             helper.setTo(to);
-            helper.setSubject("Reset your Enviro Bank password");
+            helper.setSubject("Reset Enviro Bank password");
             helper.setFrom("dingaan@gmail.com");
-            helper.setText(thymeleafService.createContent("reset-password.html", null), true);
+            helper.setText(thymeleafService.createContent("reset-password.html", variables), true);
             mailSender.send(mimeMessage);
         }catch (MessagingException e){
             LOGGER.error("failed to send email");
