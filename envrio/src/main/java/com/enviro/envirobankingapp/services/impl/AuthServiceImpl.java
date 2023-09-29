@@ -23,7 +23,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtSecurityUtil jwtSecurityUtil;
     private final UserRepository userRepository;
-    private final EmailSender emailSender;
 
     @Override
     public AuthResponse signIn(SignInRequest signInRequest) {

@@ -1,11 +1,11 @@
 package com.enviro.envirobankingapp.email;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
+import com.enviro.envirobankingapp.dto.ResetPasswordRequest;
 
 public interface EmailSender {
-    void sendToNewUser(String to, CustomerDto customerDto, String password);
+    void sendPasswordToUser(String to, CustomerDto customerDto, String password);
 
-    void sendToResetPassword(String to, CustomerDto customerDto, String password, String link);
+    void sendResetPasswordLink(String to, ResetPasswordRequest request, String link);
 
-    void sendMailCreateCustomer(CustomerDto dto);
 }

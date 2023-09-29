@@ -1,6 +1,7 @@
 package com.enviro.envirobankingapp.email;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
+import com.enviro.envirobankingapp.dto.ResetPasswordRequest;
 import com.enviro.envirobankingapp.services.ThymeleafService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -12,7 +13,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class EmailService implements EmailSender{
     ThymeleafService thymeleafService;
     @Override
     @Async
-    public void sendToNewUser(String to, CustomerDto customerDto, String password) {
+    public void sendPasswordToUser(String to, CustomerDto customerDto, String password) {
         try{
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,
@@ -51,7 +51,7 @@ public class EmailService implements EmailSender{
     }
 
     @Override
-    public void sendToResetPassword(String to, CustomerDto customerDto, String password, String link){
+    public void sendResetPasswordLink(String to, ResetPasswordRequest request, String link){
         try{
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,
@@ -60,8 +60,7 @@ public class EmailService implements EmailSender{
 
             Map<String, Object> variables = new HashMap<>();
             variables.put("link", link);
-            variables.put("name", customerDto.getName());
-            variables.put("password", password);
+//            variables.put("name", request.getName());
 
             helper.setTo(to);
             helper.setSubject("Reset Enviro Bank password");
@@ -74,23 +73,4 @@ public class EmailService implements EmailSender{
         }
     }
 
-    @Override
-    public void sendMailCreateCustomer(CustomerDto dto) {
-        try{
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(
-                    message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                    StandardCharsets.UTF_8.name()
-            );
-
-            helper.setTo(dto.getEmail());
-
-            Map<String, Object> variables = new HashMap<>();
-            variables.put("full_name", dto.getName());
-            variables.put("surname", dto.getSurname());
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 }

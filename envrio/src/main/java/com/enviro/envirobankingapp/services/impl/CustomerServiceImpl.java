@@ -62,10 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer newCustomer = customerRepository.save(customer);
 
-        String resetToken = jwtSecurityUtil.generateToken(customerDto.getName(), customerDto.getEmail());
-        String link = "http://localhost:9005/api/v1/auth/change-password?token=" + resetToken;
-        emailSender.sendToResetPassword(customerDto.getEmail(), customerDto, generatedPassword, link);
-//        emailSender.sendToNewUser(customerDto.getEmail(), customerDto, generatedPassword);
+        emailSender.sendPasswordToUser(customerDto.getEmail(), customerDto, generatedPassword);
         return mapEntityToDTO(newCustomer);
     }
 

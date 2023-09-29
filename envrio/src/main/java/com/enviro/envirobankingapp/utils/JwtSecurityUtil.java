@@ -19,7 +19,9 @@ public class JwtSecurityUtil {
     private String jwtExpirationDate;
 
     public String extractUsername(String token) {
+
         return extractClaim(token, Claims::getSubject);
+
     }
 
     public String extractEmail(String token){
@@ -29,7 +31,6 @@ public class JwtSecurityUtil {
             if(email != null){
                 return email;
             }else{
-                System.out.println("Your token is missing the email");
                 return null;
             }
 
@@ -68,14 +69,14 @@ public class JwtSecurityUtil {
                 .signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
     }
 
-    public String generateToken(String username, String email) {
+    public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", email);
-        return createNewToken(claims, username);
+        return createNewToken(claims);
     }
 
-    private String createNewToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+    private String createNewToken(Map<String, Object> claims) {
+        return Jwts.builder().setClaims(claims).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 60000)) // ONE MINUTE
                 .signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
     }
