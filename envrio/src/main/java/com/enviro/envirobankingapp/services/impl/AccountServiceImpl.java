@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class    AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService {
     private Account account;
     private  final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
@@ -47,16 +47,16 @@ public class    AccountServiceImpl implements AccountService {
 
     /***
      * Performs a withdrawal based on type of account
-     * @param accountNum Specific to an account
+     * @param accountNumber Specific to an account
      * @param amountToWithdraw Subtracted from balance
      */
     @Override
-    public void withdraw(Integer accountNum, BigDecimal amountToWithdraw) {
+    public void withdraw(Integer accountNumber, BigDecimal amountToWithdraw) {
 
         if (amountToWithdraw.compareTo(BigDecimal.ZERO) <= 0)
             throw new InsufficientFundsException("Cannot withdraw amount less than 0.");
 
-        Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumAndActive(accountNum, true));
+        Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumAndActive(accountNumber, true));
 
         if(account.isEmpty())
             throw new EntityNotFoundException("This account does not exist.");
@@ -77,6 +77,7 @@ public class    AccountServiceImpl implements AccountService {
         transaction.setTypeOfTransaction(TransactionType.WITHDRAW);
         transaction.setAccountNum(this.account);
         transaction.setAccount(this.account);
+
         Transaction newTransaction = transactionRepository.save(transaction);
 
 
@@ -89,6 +90,40 @@ public class    AccountServiceImpl implements AccountService {
 
     private AccountDto mapEntityToDto(Account account){
         return modelMapper.map(account, AccountDto.class);
+    }
+
+    @Override
+    public void transfer(Integer senderAccountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer){
+
+
+        if (amountToTransfer.compareTo(BigDecimal.ZERO) <= 0)
+            throw new InsufficientFundsException("Amount to transfer must be greater than 0.");
+
+        Optional<Account> senderAccount = Optional.ofNullable(accountRepository.findByAccountNumAndActive(senderAccountNumber, true));
+        Optional<Account> receiverAccount = Optional.ofNullable(accountRepository.findByAccountNumAndActive(receiverAccountNumber, true));
+
+
+        if(senderAccount.isEmpty() || receiverAccount.isEmpty())
+            throw new EntityNotFoundException("This account does not exist.");
+
+        this.account = senderAccount.get();
+
+
+        if (this.account.getAccountType() == AccountType.SAVINGS  || this.account.getAccountType() == AccountType.CURRENT)
+            transferBetweenSavingsAndCurrent(amountToTransfer);
+
+        this.account = receiverAccount.get();
+        BigDecimal updatedAmount = receiverAccount.get().getAccountBalance().add(amountToTransfer);
+        this.account.setAccountBalance(updatedAmount);
+
+        Transaction transaction = new Transaction();
+        transaction.setTransactionAmount(amountToTransfer);
+        transaction.setTypeOfTransaction(TransactionType.TRANSFER);
+        transaction.setAccountNum(this.account);
+        transaction.setReceiverAccountNum(receiverAccountNumber);
+        transaction.setAccount(this.account);
+
+        transactionRepository.save(transaction);
     }
 
 
@@ -121,6 +156,15 @@ public class    AccountServiceImpl implements AccountService {
             throw new InsufficientFundsException("You have exceeded your limit.");
         }
         updateAccountEntity(subtractedAmount);
+    }
+
+    private void transferBetweenSavingsAndCurrent(BigDecimal amountToTransfer){
+        BigDecimal senderBalance = account.getAccountBalance();
+        if(senderBalance.compareTo(amountToTransfer) < 0){
+            throw new InsufficientFundsException("Insufficient funds for transfer.");
+        }
+        BigDecimal subtractedAmount = senderBalance.subtract(amountToTransfer);
+        account.setAccountBalance(subtractedAmount);
     }
 
 

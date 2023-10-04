@@ -1,0 +1,2 @@
+INSERT INTO users (name, surname, email, password, id_number, phone_number)
+VALUES ('tshego', 'dingaan', 'tshego@gmail.com', '$2a$10$bDCL/GygF2FqzXx4KNY82e19Jb3dtifNE.OV.WXP54s7WBWSTOE7C', '0207290750083', '0755798823');

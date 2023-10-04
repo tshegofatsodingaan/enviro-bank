@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public interface AccountService {
     void withdraw(Integer accountNum, BigDecimal amountToWithdraw);
+
+    void transfer(Integer accountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer);
+
     List<Transaction> getTransactionsByAccountNumber(Account accountNum);
     void softDelete(Long accountNum);
 
@@ -18,5 +21,4 @@ public interface AccountService {
 
     List<Account> getAccountById(Optional<Customer> id);
 
-//    List<AccountsDto> findAccountById(Long id);
 }

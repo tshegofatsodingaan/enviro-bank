@@ -3,7 +3,6 @@ package com.enviro.envirobankingapp.controllers;
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.services.CustomerService;
-import com.enviro.envirobankingapp.services.impl.RegistrationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

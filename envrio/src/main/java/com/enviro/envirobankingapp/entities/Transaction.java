@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -28,6 +29,10 @@ public class Transaction {
     private TransactionType typeOfTransaction;
 
     private BigDecimal transactionAmount;
+
+    private Integer receiverAccountNum;
+
+//    private Date dateOfTransaction;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "accountNum", referencedColumnName = "accountNum")

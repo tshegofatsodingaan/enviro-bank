@@ -24,3 +24,6 @@ CREATE TABLE IF NOT EXISTS users_roles (
     user_id INTEGER REFERENCES users(id),
     role_id INTEGER REFERENCES roles(id)
 );
+
+ALTER TABLE transaction ADD COLUMN date_of_transaction DATE DEFAULT CURRENT_DATE;
+ALTER TABLE transaction ADD COLUMN receiver_account_num INTEGER;

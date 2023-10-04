@@ -21,6 +21,7 @@ public class AuthController {
     private UserServiceImpl userService;
     private JwtSecurityUtil jwtSecurityUtil;
 
+
     public AuthController(AuthService authService, UserServiceImpl userService, JwtSecurityUtil jwtSecurityUtil) {
         this.authService = authService;
         this.userService = userService;
@@ -38,6 +39,7 @@ public class AuthController {
         userService.resetPassword(request);
         return ResponseEntity.ok("Password-Reset mail sent successfully");
     }
+
 
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestParam("token") String token, @RequestBody ChangePasswordRequest passwordRequest){

@@ -2,13 +2,13 @@ package com.enviro.envirobankingapp.entities;
 
 import com.enviro.envirobankingapp.enums.AccountType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -34,6 +34,6 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     // field name should be "customer"
-    private Customer customerId;
+    private Customer customer;
 
 }

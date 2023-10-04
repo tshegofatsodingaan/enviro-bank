@@ -32,6 +32,17 @@ public class TransactionController {
     }
 
     @PreAuthorize(value = "hasRole({'USER'})")
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transferTransaction(@RequestBody TransactionDto transactionDto){
+        try{
+            accountService.transfer(transactionDto.getAccountNum(), transactionDto.getReceiverAccountNum(), transactionDto.getTransactionAmount());
+            return ResponseEntity.ok("Transfer was successful.");
+        }catch (InsufficientFundsException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize(value = "hasRole({'USER'})")
     @GetMapping("{accountNum}")
     public ResponseEntity<?> getTransactionsByAccountNum(@PathVariable Account accountNum){
         return ResponseEntity.ok(accountService.getTransactionsByAccountNumber(accountNum));
