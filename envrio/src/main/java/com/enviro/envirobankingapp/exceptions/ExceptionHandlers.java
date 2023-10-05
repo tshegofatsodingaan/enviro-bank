@@ -1,5 +1,6 @@
 package com.enviro.envirobankingapp.exceptions;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +19,11 @@ public class ExceptionHandlers {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> message(EntityNotFoundException e){
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<Object> message(InvalidCredentialsException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
 //    @ExceptionHandler(Exception.class)

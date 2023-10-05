@@ -5,6 +5,7 @@ import com.enviro.envirobankingapp.dto.SignInRequest;
 import com.enviro.envirobankingapp.email.EmailSender;
 import com.enviro.envirobankingapp.entities.Role;
 import com.enviro.envirobankingapp.entities.UserEntity;
+import com.enviro.envirobankingapp.exceptions.InvalidCredentialsException;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.AuthService;
 import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
@@ -28,12 +29,12 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse signIn(SignInRequest signInRequest) {
 
         UserEntity user = userRepository.findByEmail(signInRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
 
         if (passwordEncoder.matches(signInRequest.getPassword(), user.getPassword())) {
             return createAuthResponse(user);
         }
-        throw new RuntimeException("Invalid credentials");
+        throw new InvalidCredentialsException("Invalid credentials");
     }
 
 

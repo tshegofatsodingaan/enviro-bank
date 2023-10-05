@@ -35,16 +35,16 @@ public class AuthController {
         return authService.signIn(signInRequest);
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping(value = "/reset-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request){
         userService.resetPassword(request);
         return ResponseEntity.ok("Password-Reset mail sent successfully");
     }
 
 
-    @PostMapping("/change-password")
+    @PostMapping(value = "/change-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> changePassword(@RequestParam("token") String token, @RequestBody ChangePasswordRequest passwordRequest){
-        // TODO: extract the name/email from the token
+
         String email = jwtSecurityUtil.extractEmail(token);
 
         Optional<UserEntity> optionalUser = userService.findByEmail(email);

@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String resetToken = jwtSecurityUtil.generateToken(request.getEmail());
-        String link = "http://localhost:9005/api/v1/auth/change-password?token=" + resetToken;
+        String link = "http://localhost:4200/api/v1/auth/change-password?token=" + resetToken;
         emailSender.sendResetPasswordLink(request.getEmail(), request, link);
     }
 
