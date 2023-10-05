@@ -8,6 +8,7 @@ import com.enviro.envirobankingapp.entities.UserEntity;
 import com.enviro.envirobankingapp.services.AuthService;
 import com.enviro.envirobankingapp.services.impl.UserServiceImpl;
 import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class AuthController {
     }
 
 
-    @PostMapping("/sign-in")
+    @PostMapping(value = "/sign-in", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public AuthResponse signIn(@RequestBody SignInRequest signInRequest) {
         return authService.signIn(signInRequest);
     }
