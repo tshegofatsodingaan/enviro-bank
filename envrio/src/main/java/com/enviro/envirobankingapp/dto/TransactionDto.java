@@ -10,12 +10,10 @@ import java.util.UUID;
 @Data
 public class TransactionDto {
 
-    private UUID id;
     private Integer accountNum;
     private Integer receiverAccountNum;
     private TransactionType typeOfTransaction;
     private BigDecimal transactionAmount;
-    private Date dateOfTransaction;
 
 
 }

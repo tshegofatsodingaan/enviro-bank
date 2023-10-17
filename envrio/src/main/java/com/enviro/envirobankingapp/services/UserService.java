@@ -13,5 +13,5 @@ public interface UserService {
 
     void resetPassword(ResetPasswordRequest request);
 
-    void changePassword(UserEntity user, String newPassword);
+    void changePassword(UserEntity user, String newPassword, String confirmPassword);
 }

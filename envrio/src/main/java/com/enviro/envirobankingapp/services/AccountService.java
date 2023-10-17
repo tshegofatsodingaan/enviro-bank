@@ -19,6 +19,6 @@ public interface AccountService {
 
     List<AccountDto> getAccounts(int pageNo, int pageSize);
 
-    List<Account> getAccountById(Optional<Customer> id);
+    List<Account> getAccountById(Long id);
 
 }

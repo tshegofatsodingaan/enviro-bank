@@ -1,13 +1,18 @@
 package com.enviro.envirobankingapp.controllers;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
+import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.services.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/customers")
@@ -18,8 +23,16 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+
     @PreAuthorize(value = "hasRole({'ADMIN'})")
-    @PostMapping
+    @GetMapping
+    public List<Customer> getAllCustomers(){
+        return customerService.getCustomers();
+    }
+
+
+    @PreAuthorize(value = "hasRole({'ADMIN'})")
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CustomerDto> newCustomer(@RequestBody @Valid CustomerDto customerDto){
         return new ResponseEntity<>(customerService.createNewCustomer(customerDto), HttpStatus.CREATED);
     }
@@ -35,4 +48,10 @@ public class CustomerController {
         }
 
     }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Integer> getNumberOfAccounts(@PathVariable String id){
+//        int numberOfAccounts = customerService.getNumberOfAccounts(id);
+//        return ResponseEntity.ok(numberOfAccounts);
+//    }
 }

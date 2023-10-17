@@ -33,6 +33,8 @@ public class AccountServiceImpl implements AccountService {
     private final ModelMapper modelMapper;
     BigDecimal balance;
 
+    BigDecimal amountToTransfer;
+
 
     public AccountServiceImpl(TransactionRepository transactionRepository,
                               AccountRepository accountRepository,
@@ -90,6 +92,11 @@ public class AccountServiceImpl implements AccountService {
 
     private AccountDto mapEntityToDto(Account account){
         return modelMapper.map(account, AccountDto.class);
+    }
+
+    //@Scheduled(cron = "* * * * * *")
+    public void scheduledTransfer(   ){
+//        transferBetweenSavingsAndCurrent(amountToTransfer);
     }
 
     @Override
@@ -159,7 +166,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private void transferBetweenSavingsAndCurrent(BigDecimal amountToTransfer){
-        BigDecimal senderBalance = account.getAccountBalance();
+        BigDecimal senderBalance = this.account.getAccountBalance();
         if(senderBalance.compareTo(amountToTransfer) < 0){
             throw new InsufficientFundsException("Insufficient funds for transfer.");
         }
@@ -219,7 +226,7 @@ public class AccountServiceImpl implements AccountService {
      * @return Account(s) in a form of a list
      */
     @Override
-    public List<Account> getAccountById(Optional<Customer> id){
+    public List<Account> getAccountById(Long id){
         return accountRepository.findByCustomerIdAndActive(id, true);
 
     }

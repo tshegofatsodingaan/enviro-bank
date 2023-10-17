@@ -24,6 +24,8 @@ public class JwtSecurityUtil {
 
     }
 
+
+
     public String extractEmail(String token){
         try{
             Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
@@ -56,8 +58,9 @@ public class JwtSecurityUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username, Set<String> roles, String email) {
+    public String generateToken(String username, Set<String>roles, String email, Long id) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", id);
         claims.put("email", email);
         claims.put("role", roles);
         return createToken(claims, username);

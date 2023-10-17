@@ -51,7 +51,7 @@ public class AuthController {
 
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();
-            userService.changePassword(user, passwordRequest.getNewPassword());
+            userService.changePassword(user, passwordRequest.getNewPassword(), passwordRequest.getConfirmPassword());
             return ResponseEntity.ok("Password has been updated.");
         }
         return ResponseEntity.notFound().build();

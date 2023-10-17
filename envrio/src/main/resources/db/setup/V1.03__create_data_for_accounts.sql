@@ -27,3 +27,9 @@ VALUES (9, 'CURRENT', 'C249', 50000.00, 3);
 
 INSERT INTO account (account_num, account_type, customer_num, account_balance, customer_id)
 VALUES (10, 'SAVINGS', 'C098', 8000.00, 3);
+
+INSERT INTO account (account_num, account_type, customer_num, account_balance, customer_id)
+VALUES (9, 'CURRENT', 'C249', 50000.00, 4);
+
+INSERT INTO account (account_num, account_type, customer_num, account_balance, customer_id)
+VALUES (10, 'SAVINGS', 'C098', 8000.00, 4);

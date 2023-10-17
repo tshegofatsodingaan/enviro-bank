@@ -29,6 +29,8 @@ public class Account {
 
     private BigDecimal accountBalance;
 
+    private BigDecimal availableBalance;
+
     private Boolean active = true;
 
     @ManyToOne(fetch = FetchType.LAZY)

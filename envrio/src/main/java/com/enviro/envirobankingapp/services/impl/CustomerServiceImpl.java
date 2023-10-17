@@ -2,6 +2,7 @@ package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.email.EmailSender;
+import com.enviro.envirobankingapp.entities.Account;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.repository.CustomerRepository;
@@ -15,12 +16,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+
+    private Account account;
 
     private final UserRepository userRepository;
 
@@ -85,6 +89,10 @@ public class CustomerServiceImpl implements CustomerService {
         return mapEntityToDTO(updatedCustomer);
     }
 
+    @Override
+    public List<Customer> getCustomers(){
+        return customerRepository.findAll();
+    }
 
     @Override
     public Optional<Customer> getCustomerById(Long id) {
@@ -98,5 +106,18 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerDto mapEntityToDTO(Customer customer) {
         return modelMapper.map(customer, CustomerDto.class);
     }
+
+
+//    @Override
+//    public int getNumberOfAccounts(String customerId){
+//        Customer customer = customerRepository.findById(Long.valueOf(customerId)).orElse(null);
+//        if (customer == null){
+//            throw new EntityNotFoundException("Customer not found");
+//        }
+//        System.out.println( "Number of accounts" + customer.getAccounts().size());
+//        return customer.getAccounts().size();
+//
+//
+//    }
 
 }

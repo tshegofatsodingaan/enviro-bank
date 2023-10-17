@@ -20,14 +20,9 @@ public class EnviroApplication {
 		return new ModelMapper();
 	}
 
-//	Logger logger = LoggerFactory.getLogger(EnviroApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(EnviroApplication.class, args);
 	}
 
-//	@Scheduled(fixedRate = 2000L)
-//	public void job(){
-//		logger.info("Job Current Time "+new Date());
-//	}
 
 }

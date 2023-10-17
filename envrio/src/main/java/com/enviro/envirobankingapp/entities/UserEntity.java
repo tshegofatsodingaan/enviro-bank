@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -39,5 +40,8 @@ public abstract class UserEntity {
                 inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Set<Role> roles = new HashSet<>();                                        // Cascade all means when we save users, we also save roles
+
+//    @OneToMany(mappedBy = "customer")
+//    private List<Account> accounts;
 
 }
