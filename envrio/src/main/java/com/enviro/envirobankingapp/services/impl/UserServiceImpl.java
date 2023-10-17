@@ -2,8 +2,8 @@ package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.dto.ResetPasswordRequest;
 import com.enviro.envirobankingapp.email.EmailSender;
+import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.entities.UserEntity;
-import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
 import com.enviro.envirobankingapp.exceptions.InvalidCredentialsException;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.UserService;
@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,5 +66,11 @@ public class UserServiceImpl implements UserService {
 
 
         userRepository.save(user);
+    }
+
+    @Override
+    public List<UserEntity> getCustomers() {
+        System.out.println(userRepository.findAll());
+        return userRepository.findAll();
     }
 }

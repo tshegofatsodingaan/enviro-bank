@@ -1,8 +1,10 @@
 package com.enviro.envirobankingapp.services;
 
 import com.enviro.envirobankingapp.dto.ResetPasswordRequest;
+import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.entities.UserEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -14,4 +16,6 @@ public interface UserService {
     void resetPassword(ResetPasswordRequest request);
 
     void changePassword(UserEntity user, String newPassword, String confirmPassword);
+
+    List<UserEntity> getCustomers();
 }
