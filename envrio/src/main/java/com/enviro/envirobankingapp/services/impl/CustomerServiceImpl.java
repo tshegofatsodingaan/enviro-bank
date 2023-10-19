@@ -6,6 +6,7 @@ import com.enviro.envirobankingapp.entities.Account;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.repository.CustomerRepository;
+import com.enviro.envirobankingapp.repository.CustomerSummary;
 import com.enviro.envirobankingapp.repository.RoleRepository;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.CustomerService;
@@ -84,6 +85,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setSurname(customerDto.getSurname());
         customer.setIdNumber(customerDto.getIdNumber());
         customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setEmail(customerDto.getEmail());
 
         Customer updatedCustomer = customerRepository.save(customer);
         return mapEntityToDTO(updatedCustomer);
@@ -119,5 +121,11 @@ public class CustomerServiceImpl implements CustomerService {
 //
 //
 //    }
+
+    @Override
+    public List<CustomerSummary> getNumberOfAccounts(){
+        List<CustomerSummary> listOfCustomerSummaries = customerRepository.getCustomerAccountSummary();
+        return listOfCustomerSummaries;
+    }
 
 }

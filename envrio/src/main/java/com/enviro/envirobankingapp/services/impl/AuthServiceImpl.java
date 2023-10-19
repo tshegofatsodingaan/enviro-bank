@@ -46,8 +46,11 @@ public class AuthServiceImpl implements AuthService {
         return new AuthResponse(jwtSecurityUtil.generateToken(userEntity.getName(),
                 userRoles,
                 userEntity.getEmail(),
-                userEntity.getId()),
+                userEntity.getId(),
+                userEntity.getSurname()),
                 userRoles,
+                userEntity.getName(),
+                userEntity.getSurname(),
                 userId);
     }
 

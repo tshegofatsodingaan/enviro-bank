@@ -15,5 +15,7 @@ import java.util.Set;
 public class AuthResponse {
     private String token;
     private Set<String> roles;
+    private String name;
+    private String surname;
     private String id;
 }

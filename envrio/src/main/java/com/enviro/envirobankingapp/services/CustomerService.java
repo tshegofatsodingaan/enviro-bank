@@ -2,6 +2,7 @@ package com.enviro.envirobankingapp.services;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.entities.Customer;
+import com.enviro.envirobankingapp.repository.CustomerSummary;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,5 +17,7 @@ public interface CustomerService {
 
     List<Customer> getCustomers();
 
-   // int getNumberOfAccounts(String customerId);
+    List<CustomerSummary> getNumberOfAccounts();
+
+    // int getNumberOfAccounts(String customerId);
 }

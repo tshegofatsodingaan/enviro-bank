@@ -44,8 +44,8 @@ public class TransactionController {
         }
     }
 
-    @PreAuthorize(value = "hasRole({'USER'})")
-    @GetMapping("{accountNum}")
+//    @PreAuthorize(value = "hasRole({'USER'})")
+    @GetMapping("/{accountNum}")
     public ResponseEntity<?> getTransactionsByAccountNum(@PathVariable Account accountNum){
         return ResponseEntity.ok(accountService.getTransactionsByAccountNumber(accountNum));
     }

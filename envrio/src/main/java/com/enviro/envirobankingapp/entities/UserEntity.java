@@ -34,6 +34,8 @@ public abstract class UserEntity {
 
     private String phoneNumber;
 
+//    private String numberOfAccounts;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL) // Eager means as we load the users table, it loads the roles too
     @JoinTable(name = "users_roles",
                 joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -43,5 +45,7 @@ public abstract class UserEntity {
 
 //    @OneToMany(mappedBy = "customer")
 //    private List<Account> accounts;
+
+
 
 }

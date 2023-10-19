@@ -3,6 +3,7 @@ package com.enviro.envirobankingapp.controllers;
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
+import com.enviro.envirobankingapp.repository.CustomerSummary;
 import com.enviro.envirobankingapp.services.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,16 @@ public class CustomerController {
     }
 
 
+//    @PreAuthorize(value = "hasRole({'USER'})")
+    @GetMapping()
+    public Optional<Customer> getCustomersById(@RequestParam(value = "id", required = false) String id){
+        Long Id = Long.parseLong(id);
+        return customerService.getCustomerById(Id);
+
+    }
+
     @PreAuthorize(value = "hasRole({'ADMIN'})")
-    @GetMapping
+    @GetMapping("/everyone")
     public List<Customer> getAllCustomers(){
         return customerService.getCustomers();
     }
@@ -49,9 +58,11 @@ public class CustomerController {
 
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Integer> getNumberOfAccounts(@PathVariable String id){
-//        int numberOfAccounts = customerService.getNumberOfAccounts(id);
-//        return ResponseEntity.ok(numberOfAccounts);
-//    }
+    @PreAuthorize(value = "hasRole({'ADMIN'})")
+    @GetMapping("/customer-summary")
+    public ResponseEntity<List<CustomerSummary>> getCustomerSummary(){
+        List<CustomerSummary> customerList = customerService.getNumberOfAccounts();
+        return new ResponseEntity<>(customerList, HttpStatus.OK);
+    }
+
 }
