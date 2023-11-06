@@ -10,4 +10,6 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Long> {
     Account findByAccountNumAndActive(Integer accountNum, Boolean active);
     List<Account> findByCustomerIdAndActive(Long customerId, Boolean active);
+
+    List<Account> findAccountByAccountNum(int accountNum);
 }

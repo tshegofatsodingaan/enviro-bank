@@ -97,8 +97,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> getCustomerById(Long id) {
-        return customerRepository.findById(id);
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findById(id).get();
     }
 
     private Customer mapDTOtoEntity(CustomerDto customerDto){
@@ -110,22 +110,9 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-//    @Override
-//    public int getNumberOfAccounts(String customerId){
-//        Customer customer = customerRepository.findById(Long.valueOf(customerId)).orElse(null);
-//        if (customer == null){
-//            throw new EntityNotFoundException("Customer not found");
-//        }
-//        System.out.println( "Number of accounts" + customer.getAccounts().size());
-//        return customer.getAccounts().size();
-//
-//
-//    }
-
     @Override
     public List<CustomerSummary> getNumberOfAccounts(){
-        List<CustomerSummary> listOfCustomerSummaries = customerRepository.getCustomerAccountSummary();
-        return listOfCustomerSummaries;
+        return customerRepository.getCustomerAccountSummary();
     }
 
 }

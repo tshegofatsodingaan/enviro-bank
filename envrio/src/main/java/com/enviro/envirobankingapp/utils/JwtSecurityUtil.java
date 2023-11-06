@@ -35,7 +35,6 @@ public class JwtSecurityUtil {
             }else{
                 return null;
             }
-
         }catch (Exception e){
             System.out.println("Token parsing failed: " + e.getMessage());
             return null;

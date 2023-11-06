@@ -6,6 +6,7 @@ import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.repository.CustomerSummary;
 import com.enviro.envirobankingapp.services.CustomerService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,21 +14,22 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
-    public CustomerController(CustomerService customerService){
+
+    private final ModelMapper modelMapper;
+    public CustomerController(CustomerService customerService, ModelMapper modelMapper){
         this.customerService = customerService;
+        this.modelMapper = modelMapper;
     }
 
 
-//    @PreAuthorize(value = "hasRole({'USER'})")
     @GetMapping()
-    public Optional<Customer> getCustomersById(@RequestParam(value = "id", required = false) String id){
+    public Customer getCustomersById(@RequestParam(value = "id", required = false) String id){
         Long Id = Long.parseLong(id);
         return customerService.getCustomerById(Id);
 
@@ -36,7 +38,8 @@ public class CustomerController {
     @PreAuthorize(value = "hasRole({'ADMIN'})")
     @GetMapping("/everyone")
     public List<Customer> getAllCustomers(){
-        return customerService.getCustomers();
+        List<Customer> customers = customerService.getCustomers();
+        return customers.stream().map(customer -> modelMapper.map(customer, Customer.class)).toList();
     }
 
 

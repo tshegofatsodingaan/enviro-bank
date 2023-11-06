@@ -10,15 +10,16 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountService {
-    void withdraw(Integer accountNum, BigDecimal amountToWithdraw);
+    //void withdraw(Integer accountNum, BigDecimal amountToWithdraw);
 
-    void transfer(Integer accountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer);
+    //void transfer(Integer accountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer);
 
-    List<Transaction> getTransactionsByAccountNumber(Account accountNum);
+    //List<Transaction> getTransactionsByAccountNumber(int accountNum);
     void softDelete(Long accountNum);
 
     List<AccountDto> getAccounts(int pageNo, int pageSize);
 
     List<Account> getAccountById(Long id);
 
+    List<Account> getAccountByAccountNumber(int accountNum);
 }

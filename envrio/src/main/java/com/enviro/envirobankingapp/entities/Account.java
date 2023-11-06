@@ -33,7 +33,7 @@ public class Account {
 
     private Boolean active = true;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     // field name should be "customer"
     private Customer customer;

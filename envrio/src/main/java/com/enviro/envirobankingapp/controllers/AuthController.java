@@ -42,7 +42,7 @@ public class AuthController {
     }
 
 
-    @PostMapping(value = "/change-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/change-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> changePassword(@RequestParam("token") String token, @RequestBody ChangePasswordRequest passwordRequest){
 
         String email = jwtSecurityUtil.extractEmail(token);
@@ -52,7 +52,7 @@ public class AuthController {
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();
             userService.changePassword(user, passwordRequest.getNewPassword(), passwordRequest.getConfirmPassword());
-            return ResponseEntity.ok("Password has been updated.");
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }

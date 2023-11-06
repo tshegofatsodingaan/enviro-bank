@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-@Query(value = "SELECT u.name, u.email, u.surname, COUNT(a.id) as numberOfAccounts " +
+@Query(value = "SELECT u.id, u.name, u.email, u.surname, COUNT(a.id) as numberOfAccounts " +
     "FROM public.users as u " +
     "left join public.account as a on u.id = a.customer_id " +
     "group by u.name, u.id ", nativeQuery = true)

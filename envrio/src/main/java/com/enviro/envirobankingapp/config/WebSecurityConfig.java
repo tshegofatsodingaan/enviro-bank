@@ -21,7 +21,8 @@ public class WebSecurityConfig {
 
 
     public static final String[] ENDPOINTS_WHITELIST = {
-            "/api/v1/auth/**", "/api/v1/users/**"
+            "/api/v1/auth/**", "/api/v1/users/**", "/api/v1/accounts", "/api/v1/transactions/{accountNum}", "/api/v1/customers",
+            "/api/v1/transactions/transfer"
     };
 
     public WebSecurityConfig(JwtSecurityFilter jwtSecurityFilter) {

@@ -21,10 +21,10 @@ public class ExceptionHandlers {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<Object> message(InvalidCredentialsException e){
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
-    }
+//    @ExceptionHandler(InvalidCredentialsException.class)
+//    public ResponseEntity<Object> message(InvalidCredentialsException e){
+//        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+//    }
 
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception,

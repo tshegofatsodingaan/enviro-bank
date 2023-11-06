@@ -32,11 +32,11 @@ public class Transaction {
 
     private Integer receiverAccountNum;
 
-//    private Date dateOfTransaction;
+    private Date dateOfTransaction;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "accountNum", referencedColumnName = "accountNum")
-    private Account accountNum;
+//    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "accountNum", referencedColumnName = "accountNum")
+//    private Account accountNum;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
