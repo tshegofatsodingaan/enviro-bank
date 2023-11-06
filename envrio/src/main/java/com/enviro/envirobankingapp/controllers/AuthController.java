@@ -5,6 +5,7 @@ import com.enviro.envirobankingapp.dto.ChangePasswordRequest;
 import com.enviro.envirobankingapp.dto.ResetPasswordRequest;
 import com.enviro.envirobankingapp.dto.SignInRequest;
 import com.enviro.envirobankingapp.entities.UserEntity;
+import com.enviro.envirobankingapp.exceptions.InvalidCredentialsException;
 import com.enviro.envirobankingapp.services.AuthService;
 import com.enviro.envirobankingapp.services.impl.UserServiceImpl;
 import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
@@ -31,7 +32,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/sign-in", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public AuthResponse signIn(@RequestBody SignInRequest signInRequest) {
+    public AuthResponse signIn(@RequestBody SignInRequest signInRequest) throws InvalidCredentialsException {
         return authService.signIn(signInRequest);
     }
 

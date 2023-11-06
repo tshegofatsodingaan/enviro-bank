@@ -5,6 +5,7 @@ import com.enviro.envirobankingapp.email.EmailSender;
 import com.enviro.envirobankingapp.entities.Account;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
+import com.enviro.envirobankingapp.exceptions.PsqlException;
 import com.enviro.envirobankingapp.repository.CustomerRepository;
 import com.enviro.envirobankingapp.repository.CustomerSummary;
 import com.enviro.envirobankingapp.repository.RoleRepository;
@@ -53,12 +54,12 @@ public class CustomerServiceImpl implements CustomerService {
      * @return Data Transfer Object to client
      */
     @Override
-    public CustomerDto createNewCustomer(CustomerDto customerDto) {
+    public CustomerDto createNewCustomer(CustomerDto customerDto) throws PsqlException {
 
         boolean userExists = userRepository.findByEmail(customerDto.getEmail()).isPresent();
 
         if (userExists){
-           throw new IllegalStateException("email already exists");
+           throw new PsqlException("email already exists");
         }
 
         String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
@@ -79,16 +80,22 @@ public class CustomerServiceImpl implements CustomerService {
      * @return Data Transfer Object to client
      */
     @Override
-    public CustomerDto updateCustomer(CustomerDto customerDto, long id){
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("This customer does not exist."));
-        customer.setName(customerDto.getName());
-        customer.setSurname(customerDto.getSurname());
-        customer.setIdNumber(customerDto.getIdNumber());
-        customer.setPhoneNumber(customerDto.getPhoneNumber());
-        customer.setEmail(customerDto.getEmail());
+    public CustomerDto updateCustomer(CustomerDto customerDto, long id) throws EntityNotFoundException{
+        boolean userExist = userRepository.findById(id).isPresent();
+        if(userExist){
+            Customer customer = customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("This customer does not exist."));
+            customer.setName(customerDto.getName());
+            customer.setSurname(customerDto.getSurname());
+            customer.setIdNumber(customerDto.getIdNumber());
+            customer.setPhoneNumber(customerDto.getPhoneNumber());
+            customer.setEmail(customerDto.getEmail());
 
-        Customer updatedCustomer = customerRepository.save(customer);
-        return mapEntityToDTO(updatedCustomer);
+            Customer updatedCustomer = customerRepository.save(customer);
+            return mapEntityToDTO(updatedCustomer);
+        }else{
+            throw new EntityNotFoundException("This user does not exist.");
+        }
+
     }
 
     @Override

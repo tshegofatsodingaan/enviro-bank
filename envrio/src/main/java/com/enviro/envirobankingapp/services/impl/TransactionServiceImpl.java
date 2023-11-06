@@ -81,7 +81,7 @@ public class TransactionServiceImpl implements TransactionService {
      * Performs withdrawal from savings account
      * @param amount Amount to withdraw
      */
-    private void withdrawFromSavings(BigDecimal amount){
+    private void withdrawFromSavings(BigDecimal amount) throws InsufficientFundsException{
         balance = account.getAccountBalance();
         BigDecimal subtractedAmount = balance.subtract(amount);
 
@@ -97,7 +97,7 @@ public class TransactionServiceImpl implements TransactionService {
      * Performs withdrawal from current account
      * @param amount Amount to withdraw
      */
-    private void withdrawFromCurrent(BigDecimal amount){
+    private void withdrawFromCurrent(BigDecimal amount) throws InsufficientFundsException{
         balance = account.getAccountBalance();
         BigDecimal availableFunds = balance.add(accountConstants.overdraft);
         BigDecimal subtractedAmount = balance.subtract(amount);
@@ -150,7 +150,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
-    private void transferBetweenSavingsAndCurrent(BigDecimal amountToTransfer){
+    private void transferBetweenSavingsAndCurrent(BigDecimal amountToTransfer) throws InsufficientFundsException{
         BigDecimal senderBalance = this.account.getAccountBalance();
         if(senderBalance.compareTo(amountToTransfer) < 0){
             throw new InsufficientFundsException("Insufficient funds for transfer.");

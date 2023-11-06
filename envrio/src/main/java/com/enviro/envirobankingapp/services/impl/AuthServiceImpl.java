@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     @Override
-    public AuthResponse signIn(SignInRequest signInRequest) {
+    public AuthResponse signIn(SignInRequest signInRequest) throws InvalidCredentialsException {
 
         UserEntity user = userRepository.findByEmail(signInRequest.getEmail())
 

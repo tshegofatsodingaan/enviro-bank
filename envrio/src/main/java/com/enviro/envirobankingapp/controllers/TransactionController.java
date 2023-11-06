@@ -25,28 +25,24 @@ public class TransactionController {
 
     @PreAuthorize(value = "hasRole({'USER'})")
     @PostMapping("/withdraw")
-    public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionDto transactionDto){
+    public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionDto transactionDto) {
 
-        try{
+        try {
             transactionService.withdraw(transactionDto.getAccountNum(), transactionDto.getTransactionAmount());
             return ResponseEntity.ok("withdraw was successful.");
-        } catch (InsufficientFundsException e){
+        } catch (InsufficientFundsException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
     @PostMapping(value = "/transfer", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> transferTransaction(@RequestBody TransactionDto transactionDto){
-        try{
-            transactionService.transfer(transactionDto.getAccountNum(), transactionDto.getReceiverAccountNum(), transactionDto.getTransactionAmount());
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }catch (InsufficientFundsException e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+    public ResponseEntity<String> transferTransaction(@RequestBody TransactionDto transactionDto) throws InsufficientFundsException {
+        transactionService.transfer(transactionDto.getAccountNum(), transactionDto.getReceiverAccountNum(), transactionDto.getTransactionAmount());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/{accountNum}")
-    public ResponseEntity<?> getTransactionsByAccountNum(@PathVariable String accountNum){
+    public ResponseEntity<?> getTransactionsByAccountNum(@PathVariable String accountNum) {
         int accountNumber = Integer.parseInt(accountNum);
         return ResponseEntity.ok(transactionService.getTransactionsByAccountNumber(accountNumber));
     }
