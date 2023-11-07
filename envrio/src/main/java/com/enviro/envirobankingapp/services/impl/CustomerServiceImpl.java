@@ -19,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -38,7 +37,11 @@ public class CustomerServiceImpl implements CustomerService {
     private final JwtSecurityUtil jwtSecurityUtil;
 
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, UserRepository userRepository, RoleRepository roleRepository, ModelMapper modelMapper, EmailSender emailSender, JwtSecurityUtil jwtSecurityUtil){
+    public CustomerServiceImpl(CustomerRepository customerRepository,
+                               UserRepository userRepository,
+                               RoleRepository roleRepository,
+                               ModelMapper modelMapper,
+                               EmailSender emailSender, JwtSecurityUtil jwtSecurityUtil){
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;

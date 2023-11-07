@@ -31,7 +31,7 @@ public class AccountController {
 
     @PreAuthorize(value = "hasRole({'USER'})")
     @DeleteMapping("/{accountId}")
-    public ResponseEntity<String> softDeletion(@PathVariable Long accountId){
+    public ResponseEntity<String> softDeletion(@PathVariable Long accountId) throws EntityNotFoundException{
         try{
             accountService.softDelete(accountId);
             return ResponseEntity.ok("Account deactivated.");

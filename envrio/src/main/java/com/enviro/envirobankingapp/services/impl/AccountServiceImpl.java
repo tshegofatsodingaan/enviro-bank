@@ -1,15 +1,9 @@
 package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.dto.AccountDto;
-import com.enviro.envirobankingapp.entities.Transaction;
-import com.enviro.envirobankingapp.enums.AccountType;
-import com.enviro.envirobankingapp.enums.TransactionType;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
-import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
 import com.enviro.envirobankingapp.repository.AccountRepository;
-import com.enviro.envirobankingapp.repository.TransactionRepository;
 import com.enviro.envirobankingapp.services.AccountService;
-import com.enviro.envirobankingapp.dto.AccountConstants;
 import com.enviro.envirobankingapp.entities.Account;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -17,8 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -52,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
      * Deactivates an account specific to a customer
      * @param id Specific customer
      */
-    public void softDelete(Long id) {
+    public void softDelete(Long id) throws EntityNotFoundException{
         Optional<Account> optionalAccount = accountRepository.findById(id);
 
         if(optionalAccount.isEmpty()){

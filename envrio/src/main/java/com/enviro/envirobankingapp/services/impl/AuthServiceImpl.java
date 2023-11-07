@@ -2,7 +2,6 @@ package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.dto.AuthResponse;
 import com.enviro.envirobankingapp.dto.SignInRequest;
-import com.enviro.envirobankingapp.email.EmailSender;
 import com.enviro.envirobankingapp.entities.Role;
 import com.enviro.envirobankingapp.entities.UserEntity;
 import com.enviro.envirobankingapp.exceptions.InvalidCredentialsException;

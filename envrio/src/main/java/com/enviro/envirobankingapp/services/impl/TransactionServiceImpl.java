@@ -26,7 +26,9 @@ public class TransactionServiceImpl implements TransactionService {
     private Account account;
     BigDecimal balance;
 
-    public TransactionServiceImpl(TransactionRepository transactionRepository, AccountRepository accountRepository, AccountConstants accountConstants){
+    public TransactionServiceImpl(TransactionRepository transactionRepository,
+                                  AccountRepository accountRepository,
+                                  AccountConstants accountConstants){
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
         this.accountConstants = accountConstants;
@@ -39,7 +41,7 @@ public class TransactionServiceImpl implements TransactionService {
      * @param amountToWithdraw Subtracted from balance
      */
     @Override
-    public void withdraw(Integer accountNumber, BigDecimal amountToWithdraw) {
+    public void withdraw(Integer accountNumber, BigDecimal amountToWithdraw) throws EntityNotFoundException {
 
         if (amountToWithdraw.compareTo(BigDecimal.ZERO) <= 0 && amountToWithdraw.compareTo(account.getAccountBalance()) <= 0)
             throw new InsufficientFundsException("Cannot withdraw amount less than 0.");

@@ -1,6 +1,7 @@
 package com.enviro.envirobankingapp.controllers;
 
 import com.enviro.envirobankingapp.dto.TransactionDto;
+import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
 import com.enviro.envirobankingapp.services.AccountService;
 import com.enviro.envirobankingapp.services.TransactionService;
@@ -25,7 +26,7 @@ public class TransactionController {
 
     @PreAuthorize(value = "hasRole({'USER'})")
     @PostMapping("/withdraw")
-    public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<String> withdrawTransaction(@RequestBody TransactionDto transactionDto) throws EntityNotFoundException {
 
         try {
             transactionService.withdraw(transactionDto.getAccountNum(), transactionDto.getTransactionAmount());
