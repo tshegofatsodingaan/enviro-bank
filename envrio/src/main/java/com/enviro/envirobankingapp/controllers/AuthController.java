@@ -37,17 +37,17 @@ public class AuthController {
     }
 
     @PostMapping(value = "/reset-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request){
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) throws InvalidCredentialsException{
         userService.resetPassword(request);
         return ResponseEntity.ok("Password-Reset mail sent successfully");
     }
 
 
     @PostMapping(value = "/change-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<String> changePassword(@RequestParam("token") String token, @RequestBody ChangePasswordRequest passwordRequest){
+    public ResponseEntity<String> changePassword(@RequestParam("token") String token,
+                                                 @RequestBody ChangePasswordRequest passwordRequest) throws InvalidCredentialsException{
 
         String email = jwtSecurityUtil.extractEmail(token);
-
         Optional<UserEntity> optionalUser = userService.findByEmail(email);
 
         if(optionalUser.isPresent()){

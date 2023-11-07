@@ -8,6 +8,7 @@ import com.enviro.envirobankingapp.exceptions.InvalidCredentialsException;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.UserService;
 import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
+import io.swagger.models.auth.In;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,11 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetPassword(ResetPasswordRequest request){
+    public void resetPassword(ResetPasswordRequest request) throws InvalidCredentialsException{
         boolean userExists = userRepository.findByEmail(request.getEmail()).isPresent();
 
         if(!userExists){
-            throw new IllegalStateException(request.getEmail() + "is not found.");
+            throw new InvalidCredentialsException(request.getEmail() + " is not found.");
         }
 
         String resetToken = jwtSecurityUtil.generateToken(request.getEmail());
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(UserEntity user, String newPassword, String confirmPassword) {
+    public void changePassword(UserEntity user, String newPassword, String confirmPassword) throws InvalidCredentialsException {
         if(newPassword.equals(confirmPassword)){
           if (!passwordEncoder.matches(confirmPassword, user.getPassword())){
                 user.setPassword(passwordEncoder.encode(newPassword));

@@ -60,16 +60,18 @@ public class CustomerServiceImpl implements CustomerService {
 
         if (userExists){
            throw new PsqlException("email already exists");
+        } else{
+            String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
+            Customer customer = mapDTOtoEntity(customerDto);
+            customer.setPassword(passwordEncoder.encode(generatedPassword));
+
+            Customer newCustomer = customerRepository.save(customer);
+
+            emailSender.sendPasswordToUser(customerDto.getEmail(), customerDto, generatedPassword);
+            return mapEntityToDTO(newCustomer);
         }
 
-        String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
-        Customer customer = mapDTOtoEntity(customerDto);
-        customer.setPassword(passwordEncoder.encode(generatedPassword));
 
-        Customer newCustomer = customerRepository.save(customer);
-
-        emailSender.sendPasswordToUser(customerDto.getEmail(), customerDto, generatedPassword);
-        return mapEntityToDTO(newCustomer);
     }
 
 
