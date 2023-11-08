@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.util.Date;
 
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 public class EnviroApplication {
 
 	@Bean

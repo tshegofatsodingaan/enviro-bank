@@ -20,4 +20,5 @@ public class UserController {
     public List<UserEntity> getAllUsers(){
         return userService.getCustomers();
     }
+
 }

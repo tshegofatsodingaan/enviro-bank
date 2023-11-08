@@ -20,8 +20,8 @@ import java.util.Optional;
 public class AuthController {
 
     private final AuthService authService;
-    private UserServiceImpl userService;
-    private JwtSecurityUtil jwtSecurityUtil;
+    private final UserServiceImpl userService;
+    private final JwtSecurityUtil jwtSecurityUtil;
 
 
     public AuthController(AuthService authService, UserServiceImpl userService, JwtSecurityUtil jwtSecurityUtil) {
@@ -38,7 +38,7 @@ public class AuthController {
 
     @PostMapping(value = "/reset-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) throws InvalidCredentialsException{
-        userService.resetPassword(request);
+        authService.resetPassword(request);
         return ResponseEntity.ok("Password-Reset mail sent successfully");
     }
 
@@ -52,7 +52,7 @@ public class AuthController {
 
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();
-            userService.changePassword(user, passwordRequest.getNewPassword(), passwordRequest.getConfirmPassword());
+            authService.changePassword(user, passwordRequest.getNewPassword(), passwordRequest.getConfirmPassword());
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

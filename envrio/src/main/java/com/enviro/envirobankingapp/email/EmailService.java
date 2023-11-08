@@ -40,7 +40,7 @@ public class EmailService implements EmailSender{
 
             helper.setTo(to);
             helper.setSubject("Welcome new user");
-            helper.setFrom("tshego@gmail.com");
+            helper.setFrom("envirobank.365@gmail.com");
             helper.setText(thymeleafService.createContent("create-new-customer.html", variables), true);
             mailSender.send(mimeMessage);
         }catch (MessagingException e){
@@ -63,7 +63,7 @@ public class EmailService implements EmailSender{
 
             helper.setTo(to);
             helper.setSubject("Reset Enviro Bank password");
-            helper.setFrom("dingaan@gmail.com");
+            helper.setFrom("envirobank.365@gmail.com");
             helper.setText(thymeleafService.createContent("reset-password.html", variables), true);
             mailSender.send(mimeMessage);
         }catch (MessagingException e){
