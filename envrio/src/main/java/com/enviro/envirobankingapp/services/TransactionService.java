@@ -9,7 +9,7 @@ import java.util.List;
 public interface TransactionService {
     void withdraw(Integer accountNumber, BigDecimal amountToWithdraw) throws EntityNotFoundException;
 
-    void transfer(Integer senderAccountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer);
+    void transfer(Integer senderAccountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer) throws EntityNotFoundException;
 
     List<Transaction> getTransactionsByAccountNumber(int accountNum);
 }

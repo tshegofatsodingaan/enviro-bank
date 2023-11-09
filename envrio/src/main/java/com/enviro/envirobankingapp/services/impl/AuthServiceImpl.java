@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,6 @@ public class AuthServiceImpl implements AuthService {
     public AuthResponse signIn(SignInRequest signInRequest) throws InvalidCredentialsException {
 
         UserEntity user = userRepository.findByEmail(signInRequest.getEmail())
-
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid credentials"));
 
         if (passwordEncoder.matches(signInRequest.getPassword(), user.getPassword())) {
@@ -42,13 +42,12 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public void resetPassword(ResetPasswordRequest request) throws InvalidCredentialsException {
+    public void resetPassword(ResetPasswordRequest request) {
         boolean userExists = userRepository.findByEmail(request.getEmail()).isPresent();
 
         if (!userExists) {
             return;
         }
-
         String resetToken = jwtSecurityUtil.generateToken(request.getEmail());
         String link = "http://localhost:4200/change-password?token=" + resetToken;
         emailSender.sendResetPasswordLink(request.getEmail(), request, link);
@@ -67,8 +66,12 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidCredentialsException("passwords do not match.");
         }
 
-
         userRepository.save(user);
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
 

@@ -7,7 +7,6 @@ import com.enviro.envirobankingapp.dto.SignInRequest;
 import com.enviro.envirobankingapp.entities.UserEntity;
 import com.enviro.envirobankingapp.exceptions.InvalidCredentialsException;
 import com.enviro.envirobankingapp.services.AuthService;
-import com.enviro.envirobankingapp.services.impl.UserServiceImpl;
 import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +19,11 @@ import java.util.Optional;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserServiceImpl userService;
     private final JwtSecurityUtil jwtSecurityUtil;
 
 
-    public AuthController(AuthService authService, UserServiceImpl userService, JwtSecurityUtil jwtSecurityUtil) {
+    public AuthController(AuthService authService, JwtSecurityUtil jwtSecurityUtil) {
         this.authService = authService;
-        this.userService = userService;
         this.jwtSecurityUtil = jwtSecurityUtil;
     }
 
@@ -48,7 +45,7 @@ public class AuthController {
                                                  @RequestBody ChangePasswordRequest passwordRequest) throws InvalidCredentialsException{
 
         String email = jwtSecurityUtil.extractEmail(token);
-        Optional<UserEntity> optionalUser = userService.findByEmail(email);
+        Optional<UserEntity> optionalUser = authService.findByEmail(email);
 
         if(optionalUser.isPresent()){
             UserEntity user = optionalUser.get();

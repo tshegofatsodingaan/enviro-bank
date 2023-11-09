@@ -25,8 +25,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
 
-    private Account account;
-
     private final UserRepository userRepository;
 
     private final RoleRepository roleRepository;
@@ -73,8 +71,6 @@ public class CustomerServiceImpl implements CustomerService {
             emailSender.sendPasswordToUser(customerDto.getEmail(), customerDto, generatedPassword);
             return mapEntityToDTO(newCustomer);
         }
-
-
     }
 
 

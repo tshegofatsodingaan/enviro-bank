@@ -118,7 +118,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public void transfer(Integer senderAccountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer){
+    public void transfer(Integer senderAccountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer)  throws EntityNotFoundException{
 
 
         if (amountToTransfer.compareTo(BigDecimal.ZERO) <= 0)
@@ -146,7 +146,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setTypeOfTransaction(TransactionType.TRANSFER);
         transaction.setAccount(this.account);
         transaction.setReceiverAccountNum(receiverAccountNumber);
-        transaction.setDateOfTransaction(new Date());
+        transaction.setDateOfTransaction(new Date() );
 
         transactionRepository.save(transaction);
     }

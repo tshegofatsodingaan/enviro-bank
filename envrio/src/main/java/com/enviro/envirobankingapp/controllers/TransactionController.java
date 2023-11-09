@@ -37,7 +37,7 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/transfer", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<String> transferTransaction(@RequestBody TransactionDto transactionDto) throws InsufficientFundsException {
+    public ResponseEntity<String> transferTransaction(@RequestBody TransactionDto transactionDto) throws InsufficientFundsException, EntityNotFoundException {
         transactionService.transfer(transactionDto.getAccountNum(), transactionDto.getReceiverAccountNum(), transactionDto.getTransactionAmount());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
