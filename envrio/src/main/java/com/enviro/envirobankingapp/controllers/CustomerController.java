@@ -4,7 +4,7 @@ import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.exceptions.PsqlException;
-import com.enviro.envirobankingapp.repository.CustomerSummary;
+import com.enviro.envirobankingapp.services.CustomerSummary;
 import com.enviro.envirobankingapp.services.CustomerService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/v1/customers")
@@ -31,7 +32,7 @@ public class CustomerController {
 
 
     @GetMapping()
-    public Customer getCustomersById(@RequestParam(value = "id", required = false) String id) {
+    public Optional<Customer> getCustomersById(@RequestParam(value = "id", required = false) String id) {
         Long Id = Long.parseLong(id);
         return customerService.getCustomerById(Id);
 

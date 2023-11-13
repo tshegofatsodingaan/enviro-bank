@@ -9,7 +9,11 @@ import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.exceptions.InsufficientFundsException;
 import com.enviro.envirobankingapp.repository.AccountRepository;
 import com.enviro.envirobankingapp.repository.TransactionRepository;
+import com.enviro.envirobankingapp.services.AccountService;
+import com.enviro.envirobankingapp.services.PendingTransactions;
 import com.enviro.envirobankingapp.services.TransactionService;
+import jakarta.transaction.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,15 +27,17 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final AccountConstants accountConstants;
+    private final AccountService accountService;
     private Account account;
     BigDecimal balance;
 
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   AccountRepository accountRepository,
-                                  AccountConstants accountConstants){
+                                  AccountConstants accountConstants, AccountService accountService) {
         this.transactionRepository = transactionRepository;
         this.accountRepository = accountRepository;
         this.accountConstants = accountConstants;
+        this.accountService = accountService;
     }
 
 
@@ -48,7 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Optional<Account> account = Optional.ofNullable(accountRepository.findByAccountNumAndActive(accountNumber, true));
 
-        if(account.isEmpty())
+        if (account.isEmpty())
             throw new EntityNotFoundException("This account does not exist.");
 
         this.account = account.get();
@@ -56,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
         if (this.account.getAccountType() == AccountType.SAVINGS)
             withdrawFromSavings(amountToWithdraw);
 
-        if(this.account.getAccountType() == AccountType.CURRENT)
+        if (this.account.getAccountType() == AccountType.CURRENT)
             withdrawFromCurrent(amountToWithdraw);
 
 
@@ -66,7 +72,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setTransactionAmount(amountToWithdraw);
         transaction.setTypeOfTransaction(TransactionType.WITHDRAW);
         transaction.setAccount(this.account);
-        transaction.setAccount(this.account);
+//        transaction.setAccount(this.account);
 
         Transaction newTransaction = transactionRepository.save(transaction);
 
@@ -83,11 +89,11 @@ public class TransactionServiceImpl implements TransactionService {
      * Performs withdrawal from savings account
      * @param amount Amount to withdraw
      */
-    private void withdrawFromSavings(BigDecimal amount) throws InsufficientFundsException{
+    private void withdrawFromSavings(BigDecimal amount) throws InsufficientFundsException {
         balance = account.getAccountBalance();
         BigDecimal subtractedAmount = balance.subtract(amount);
 
-        if(!(balance.compareTo(amount) > 0
+        if (!(balance.compareTo(amount) > 0
                 && subtractedAmount.compareTo(accountConstants.minimum) >= 0)) {
             throw new InsufficientFundsException("Savings Account cannot contain amount less than a R" + accountConstants.minimum + ".");
         }
@@ -99,18 +105,18 @@ public class TransactionServiceImpl implements TransactionService {
      * Performs withdrawal from current account
      * @param amount Amount to withdraw
      */
-    private void withdrawFromCurrent(BigDecimal amount) throws InsufficientFundsException{
+    private void withdrawFromCurrent(BigDecimal amount) throws InsufficientFundsException {
         balance = account.getAccountBalance();
         BigDecimal availableFunds = balance.add(accountConstants.overdraft);
         BigDecimal subtractedAmount = balance.subtract(amount);
 
-        if(!(amount.compareTo(availableFunds) < 0)){
+        if (!(amount.compareTo(availableFunds) < 0)) {
             throw new InsufficientFundsException("You have exceeded your limit.");
         }
         updateAccountEntity(subtractedAmount);
     }
 
-    public void updateAccountEntity(BigDecimal subtractedAmount){
+    public void updateAccountEntity(BigDecimal subtractedAmount) {
         balance = subtractedAmount;
         account.setAccountBalance(subtractedAmount);
         accountRepository.save(account);
@@ -118,7 +124,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public void transfer(Integer senderAccountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer)  throws EntityNotFoundException{
+    public void transfer(Integer senderAccountNumber, Integer receiverAccountNumber, BigDecimal amountToTransfer) throws EntityNotFoundException, InsufficientFundsException {
 
 
         if (amountToTransfer.compareTo(BigDecimal.ZERO) <= 0)
@@ -127,43 +133,61 @@ public class TransactionServiceImpl implements TransactionService {
         Optional<Account> senderAccount = Optional.ofNullable(accountRepository.findByAccountNumAndActive(senderAccountNumber, true));
         Optional<Account> receiverAccount = Optional.ofNullable(accountRepository.findByAccountNumAndActive(receiverAccountNumber, true));
 
-
-        if(senderAccount.isEmpty() || receiverAccount.isEmpty())
+        if (senderAccount.isEmpty() || receiverAccount.isEmpty())
             throw new EntityNotFoundException("This account does not exist.");
+        Account accountSender = senderAccount.get();
 
-        this.account = senderAccount.get();
+        if (accountSender.getAvailableBalance().compareTo(amountToTransfer) < 0)
+            throw new InsufficientFundsException("Insufficient funds for transfer.");
 
+        accountSender.setAvailableBalance(accountSender.getAvailableBalance().subtract(amountToTransfer));
+        accountService.updateAccount(accountSender);
 
-        if (this.account.getAccountType() == AccountType.SAVINGS  || this.account.getAccountType() == AccountType.CURRENT)
-            transferBetweenSavingsAndCurrent(amountToTransfer);
-
-        this.account = receiverAccount.get();
-        BigDecimal updatedAmount = receiverAccount.get().getAccountBalance().add(amountToTransfer);
-        this.account.setAccountBalance(updatedAmount);
 
         Transaction transaction = new Transaction();
         transaction.setTransactionAmount(amountToTransfer);
         transaction.setTypeOfTransaction(TransactionType.TRANSFER);
-        transaction.setAccount(this.account);
+        transaction.setAccount(accountSender);
+        transaction.setSenderAccountNum(senderAccountNumber);
         transaction.setReceiverAccountNum(receiverAccountNumber);
-        transaction.setDateOfTransaction(new Date() );
+        transaction.setDateOfTransaction(new Date());
 
         transactionRepository.save(transaction);
+
     }
 
+    @Transactional
+    @Scheduled(cron = "0/30 * * * * *")
+    public void scheduledBalanceUpdate() {
+        System.out.println("I am scheduled!!!");
+        List<Transaction> pendingTransactions = transactionRepository.findTransactionByPendingIsTrue();
+        pendingTransactions.forEach(
+                transaction -> {
+                    transaction.setPending(false);
+                    Account accountSender = accountRepository.findAccountByAccountNum(transaction.getSenderAccountNum());
+                    accountSender.setAccountBalance(accountSender.getAccountBalance().subtract(transaction.getTransactionAmount()));
+                    accountService.updateAccount(accountSender);
 
-    private void transferBetweenSavingsAndCurrent(BigDecimal amountToTransfer) throws InsufficientFundsException{
-        BigDecimal senderBalance = this.account.getAccountBalance();
-        if(senderBalance.compareTo(amountToTransfer) < 0){
-            throw new InsufficientFundsException("Insufficient funds for transfer.");
-        }
-        BigDecimal subtractedAmount = senderBalance.subtract(amountToTransfer);
-        account.setAccountBalance(subtractedAmount);
+                    Account accountReceiver = accountRepository.findAccountByAccountNum(transaction.getReceiverAccountNum());
+                    accountReceiver.setAccountBalance(accountReceiver.getAccountBalance().add(transaction.getTransactionAmount()));
+                    accountReceiver.setAvailableBalance(accountReceiver.getAvailableBalance().add(transaction.getTransactionAmount()));
+                    accountService.updateAccount(accountReceiver);
+
+                    updateTransaction(transaction);
+                }
+        );
+
+
     }
 
 
     @Override
     public List<Transaction> getTransactionsByAccountNumber(int accountNum) {
         return transactionRepository.findTransactionByAccountAccountNum(accountNum);
+    }
+
+    @Override
+    public void updateTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
     }
 }

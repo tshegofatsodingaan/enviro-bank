@@ -8,6 +8,7 @@ import com.enviro.envirobankingapp.entities.UserEntity;
 import com.enviro.envirobankingapp.exceptions.InvalidCredentialsException;
 import com.enviro.envirobankingapp.services.AuthService;
 import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class AuthController {
 
     @PostMapping(value = "/change-password", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<String> changePassword(@RequestParam("token") String token,
-                                                 @RequestBody ChangePasswordRequest passwordRequest) throws InvalidCredentialsException{
+                                                 @RequestBody @Valid ChangePasswordRequest passwordRequest) throws InvalidCredentialsException{
 
         String email = jwtSecurityUtil.extractEmail(token);
         Optional<UserEntity> optionalUser = authService.findByEmail(email);

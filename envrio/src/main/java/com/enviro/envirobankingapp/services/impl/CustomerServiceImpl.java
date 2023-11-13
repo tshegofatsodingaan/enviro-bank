@@ -2,12 +2,11 @@ package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.email.EmailSender;
-import com.enviro.envirobankingapp.entities.Account;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.exceptions.PsqlException;
 import com.enviro.envirobankingapp.repository.CustomerRepository;
-import com.enviro.envirobankingapp.repository.CustomerSummary;
+import com.enviro.envirobankingapp.services.CustomerSummary;
 import com.enviro.envirobankingapp.repository.RoleRepository;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.CustomerService;
@@ -19,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
                                UserRepository userRepository,
                                RoleRepository roleRepository,
                                ModelMapper modelMapper,
-                               EmailSender emailSender, JwtSecurityUtil jwtSecurityUtil){
+                               EmailSender emailSender, JwtSecurityUtil jwtSecurityUtil) {
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
@@ -59,9 +59,9 @@ public class CustomerServiceImpl implements CustomerService {
 
         boolean userExists = userRepository.findByEmail(customerDto.getEmail()).isPresent();
 
-        if (userExists){
-           throw new PsqlException("email already exists");
-        } else{
+        if (userExists) {
+            throw new PsqlException("email already exists");
+        } else {
             String generatedPassword = RandomStringUtils.randomAlphanumeric(10);
             Customer customer = mapDTOtoEntity(customerDto);
             customer.setPassword(passwordEncoder.encode(generatedPassword));
@@ -81,9 +81,9 @@ public class CustomerServiceImpl implements CustomerService {
      * @return Data Transfer Object to client
      */
     @Override
-    public CustomerDto updateCustomer(CustomerDto customerDto, long id) throws EntityNotFoundException{
+    public CustomerDto updateCustomer(CustomerDto customerDto, long id) throws EntityNotFoundException {
         boolean userExist = userRepository.findById(id).isPresent();
-        if(userExist){
+        if (userExist) {
             Customer customer = customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("This customer does not exist."));
             customer.setName(customerDto.getName());
             customer.setSurname(customerDto.getSurname());
@@ -93,23 +93,23 @@ public class CustomerServiceImpl implements CustomerService {
 
             Customer updatedCustomer = customerRepository.save(customer);
             return mapEntityToDTO(updatedCustomer);
-        }else{
+        } else {
             throw new EntityNotFoundException("This user does not exist.");
         }
 
     }
 
     @Override
-    public List<Customer> getCustomers(){
+    public List<Customer> getCustomers() {
         return customerRepository.findAll();
     }
 
     @Override
-    public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id).get();
+    public Optional<Customer> getCustomerById(Long id) {
+            return customerRepository.findById(id);
     }
 
-    private Customer mapDTOtoEntity(CustomerDto customerDto){
+    private Customer mapDTOtoEntity(CustomerDto customerDto) {
         return modelMapper.map(customerDto, Customer.class);
     }
 
@@ -119,7 +119,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public List<CustomerSummary> getNumberOfAccounts(){
+    public List<CustomerSummary> getNumberOfAccounts() {
         return customerRepository.getCustomerAccountSummary();
     }
 

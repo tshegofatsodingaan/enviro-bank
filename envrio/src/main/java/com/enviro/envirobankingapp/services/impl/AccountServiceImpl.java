@@ -34,11 +34,6 @@ public class AccountServiceImpl implements AccountService {
         return modelMapper.map(account, AccountDto.class);
     }
 
-    //@Scheduled(cron = "* * * * * *")
-    public void scheduledTransfer(   ){
-//        transferBetweenSavingsAndCurrent(amountToTransfer);
-    }
-
 
     /***
      * Deactivates an account specific to a customer
@@ -86,5 +81,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> getAccountByAccountNumber(int accountNum){
         return accountRepository.findAccountByAccountNum(accountNum);
+    }
+
+    @Override
+    public Account updateAccount(Account account) {
+        return accountRepository.save(account);
     }
 }

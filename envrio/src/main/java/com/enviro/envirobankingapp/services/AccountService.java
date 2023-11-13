@@ -23,4 +23,6 @@ public interface AccountService {
     List<Account> getAccountById(Long id);
 
     List<Account> getAccountByAccountNumber(int accountNum);
+
+    Account updateAccount(Account account);
 }
