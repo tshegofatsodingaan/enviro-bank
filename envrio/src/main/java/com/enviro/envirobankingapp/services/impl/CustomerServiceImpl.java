@@ -2,15 +2,18 @@ package com.enviro.envirobankingapp.services.impl;
 
 import com.enviro.envirobankingapp.dto.CustomerDto;
 import com.enviro.envirobankingapp.email.EmailSender;
+import com.enviro.envirobankingapp.entities.Admin;
 import com.enviro.envirobankingapp.entities.Customer;
 import com.enviro.envirobankingapp.exceptions.EntityNotFoundException;
 import com.enviro.envirobankingapp.exceptions.PsqlException;
+import com.enviro.envirobankingapp.repository.AdminRepository;
 import com.enviro.envirobankingapp.repository.CustomerRepository;
 import com.enviro.envirobankingapp.services.CustomerSummary;
 import com.enviro.envirobankingapp.repository.RoleRepository;
 import com.enviro.envirobankingapp.repository.UserRepository;
 import com.enviro.envirobankingapp.services.CustomerService;
 import com.enviro.envirobankingapp.utils.JwtSecurityUtil;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,9 +24,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+
+    private final AdminRepository adminRepository;
 
     private final UserRepository userRepository;
 
@@ -35,18 +41,18 @@ public class CustomerServiceImpl implements CustomerService {
     private final JwtSecurityUtil jwtSecurityUtil;
 
 
-    public CustomerServiceImpl(CustomerRepository customerRepository,
-                               UserRepository userRepository,
-                               RoleRepository roleRepository,
-                               ModelMapper modelMapper,
-                               EmailSender emailSender, JwtSecurityUtil jwtSecurityUtil) {
-        this.customerRepository = customerRepository;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.modelMapper = modelMapper;
-        this.emailSender = emailSender;
-        this.jwtSecurityUtil = jwtSecurityUtil;
-    }
+//    public CustomerServiceImpl(CustomerRepository customerRepository,
+//                               UserRepository userRepository,
+//                               RoleRepository roleRepository,
+//                               ModelMapper modelMapper,
+//                               EmailSender emailSender, JwtSecurityUtil jwtSecurityUtil) {
+//        this.customerRepository = customerRepository;
+//        this.userRepository = userRepository;
+//        this.roleRepository = roleRepository;
+//        this.modelMapper = modelMapper;
+//        this.emailSender = emailSender;
+//        this.jwtSecurityUtil = jwtSecurityUtil;
+//    }
 
 
     /***
@@ -82,19 +88,32 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public CustomerDto updateCustomer(CustomerDto customerDto, long id) throws EntityNotFoundException {
-        boolean userExist = userRepository.findById(id).isPresent();
-        if (userExist) {
-            Customer customer = customerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("This customer does not exist."));
+
+        Optional<Customer> dbCustomer = customerRepository.findById(id);
+        Optional<Admin> dbAdmin = adminRepository.findById(id);
+
+        if (dbCustomer.isPresent()) {
+            Customer customer = dbCustomer.get();
             customer.setName(customerDto.getName());
             customer.setSurname(customerDto.getSurname());
             customer.setIdNumber(customerDto.getIdNumber());
             customer.setPhoneNumber(customerDto.getPhoneNumber());
             customer.setEmail(customerDto.getEmail());
+            return mapEntityToDTO(customerRepository.save(customer));
 
-            Customer updatedCustomer = customerRepository.save(customer);
-            return mapEntityToDTO(updatedCustomer);
+        } else if (dbAdmin.isPresent()) {
+            Admin admin = dbAdmin.get();
+
+            admin.setName(customerDto.getName());
+            admin.setSurname(customerDto.getSurname());
+            admin.setIdNumber(customerDto.getIdNumber());
+            admin.setPhoneNumber(customerDto.getPhoneNumber());
+            admin.setEmail(customerDto.getEmail());
+
+            return mapEntityToDTO(adminRepository.save(admin));
         } else {
-            throw new EntityNotFoundException("This user does not exist.");
+
+          throw new EntityNotFoundException("This User does not exist.");
         }
 
     }
@@ -106,7 +125,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Optional<Customer> getCustomerById(Long id) {
-            return customerRepository.findById(id);
+        return customerRepository.findById(id);
     }
 
     private Customer mapDTOtoEntity(CustomerDto customerDto) {
@@ -115,6 +134,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     private CustomerDto mapEntityToDTO(Customer customer) {
         return modelMapper.map(customer, CustomerDto.class);
+    }
+
+    private CustomerDto mapEntityToDTO(Admin admin) {
+
+        return modelMapper.map(admin, CustomerDto.class);
     }
 
 

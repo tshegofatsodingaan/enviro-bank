@@ -152,6 +152,14 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setReceiverAccountNum(receiverAccountNumber);
         transaction.setDateOfTransaction(new Date());
 
+        if (accountSender.getAccountNum().equals(senderAccountNumber)) {
+            transaction.setAmountDeducted(amountToTransfer);
+            transaction.setAmountAdded(BigDecimal.ZERO);
+        } else if (accountSender.getAccountNum().equals(receiverAccountNumber)) {
+            transaction.setAmountDeducted(BigDecimal.ZERO);
+            transaction.setAmountAdded(amountToTransfer);
+        }
+
         transactionRepository.save(transaction);
 
     }

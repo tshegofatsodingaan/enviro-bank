@@ -52,17 +52,4 @@ public class ExceptionHandlers {
         return ResponseEntity.badRequest().body(errors);
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public Map<String ,String> handleInvalidArgument(MethodArgumentNotValidException exception){
-//
-//    }
-
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception,
-//                                                              WebRequest webRequest){
-//        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), webRequest.getDescription(false));
-//        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-
 }

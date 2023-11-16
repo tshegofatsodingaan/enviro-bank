@@ -23,10 +23,10 @@ INSERT INTO account (account_num, account_type, customer_num, account_balance, c
 VALUES (8, 'SAVINGS', 'C974', 4000.00, 1, 4000.00);
 
 INSERT INTO account (account_num, account_type, customer_num, account_balance, customer_id, available_balance)
-VALUES (9, 'CURRENT', 'C249', 50000.00, 3, 50000.00);
+VALUES (9, 'CURRENT', 'C249', 50000.00, 9, 50000.00);
 
 INSERT INTO account (account_num, account_type, customer_num, account_balance, customer_id, available_balance)
-VALUES (10, 'SAVINGS', 'C098', 8000.00, 3, 8000.00);
+VALUES (10, 'SAVINGS', 'C098', 8000.00, 9, 8000.00);
 
 INSERT INTO account (account_num, account_type, customer_num, account_balance, customer_id, available_balance)
 VALUES (9, 'CURRENT', 'C249', 50000.00, 4, 50000.00);

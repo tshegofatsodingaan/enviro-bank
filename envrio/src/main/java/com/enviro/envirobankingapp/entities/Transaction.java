@@ -38,6 +38,10 @@ public class Transaction {
 
     private Boolean pending = true;
 
+    private BigDecimal amountAdded;
+
+    private BigDecimal amountDeducted;
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;

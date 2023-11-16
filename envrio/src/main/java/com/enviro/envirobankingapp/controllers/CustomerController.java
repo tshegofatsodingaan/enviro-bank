@@ -52,7 +52,7 @@ public class CustomerController {
         return new ResponseEntity<>(customerService.createNewCustomer(customerDto), HttpStatus.CREATED);
     }
 
-    @PreAuthorize(value = "hasRole({'ADMIN'})")
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCustomer(@RequestBody @Valid CustomerDto customerDto, @PathVariable(name = "id") long id) throws EntityNotFoundException {
 

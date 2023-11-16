@@ -1,6 +1,5 @@
 package com.enviro.envirobankingapp.dto;
 
-import com.enviro.envirobankingapp.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

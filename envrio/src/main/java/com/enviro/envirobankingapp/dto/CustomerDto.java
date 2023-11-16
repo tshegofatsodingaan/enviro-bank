@@ -20,5 +20,7 @@ public class CustomerDto {
     private String phoneNumber;
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Please enter a valid email address.")
     private String email;
+
+
 }
 
